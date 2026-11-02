@@ -1,0 +1,58 @@
+{
+  "record_id": "al:ao:lei-12-23-2023",
+  "title": "Lei n.º 12/23 — Lei Geral do Trabalho",
+  "title_pt": "Lei n.º 12/23 — Lei Geral do Trabalho",
+  "title_en": "Law No. 12/23 — General Labour Law",
+  "document_nature": "legislation",
+  "document_nature_detail": "General labour legislation",
+  "legal_force": "binding",
+  "temporal_status": "unknown",
+  "verification_status": "verified",
+  "issuing_authority": "Assembleia Nacional",
+  "territorial_scope": "National — Republic of Angola",
+  "subject_matter": [
+    "labour law",
+    "employment",
+    "labour relations"
+  ],
+  "jurisdiction": "AO",
+  "language": [
+    "pt"
+  ],
+  "date_issued": "2023-12-27",
+  "date_published": "2023-12-27",
+  "effective_from": null,
+  "effective_until": null,
+  "official_identifier": "Lei n.º 12/23; Diário da República, I Série, n.º 245, de 27 de Dezembro de 2023",
+  "related_identifiers": [],
+  "source_url": "https://www.lgt.gov.ao/wp-content/themes/Lei%20Geral%20do%20Trabalho/assets/pdf/LEI-GERAL-DO-TRABALHO-2023.pdf",
+  "source_name": "Lei Geral do Trabalho portal, MAPTSS",
+  "accessed_at": "2026-11-03",
+  "reuse_rights": {
+    "status": "link_only",
+    "license": null,
+    "evidence": "No explicit redistribution licence was confirmed.",
+    "notes": "Metadata and source link only; no source text or PDF is redistributed."
+  },
+  "provenance": {
+    "source_description": "MAPTSS LGT portal hosts a PDF whose masthead identifies Diário da República, I Série, n.º 245, 27 December 2023, and Lei n.º 12/23.",
+    "collected_at": "2026-11-03",
+    "method": "Inspected PDF indexed and hosted on official MAPTSS LGT domain; matched law number/title and Gazette issue masthead.",
+    "contributor": "Angola Legal project"
+  },
+  "summary": "Establishes the General Labour Law; commencement and later change chain remain unaudited.",
+  "notes": [
+    "Temporal status and subsequent amendment/corrigendum chain have not been fully audited.",
+    "Publication date is not treated as proof of present force or commencement."
+  ],
+  "versioning": {
+    "version_label": "original-publication",
+    "version_of": null,
+    "version_type": "original",
+    "evidence_url": "https://www.lgt.gov.ao/wp-content/themes/Lei%20Geral%20do%20Trabalho/assets/pdf/LEI-GERAL-DO-TRABALHO-2023.pdf",
+    "change_status": "not_monitored",
+    "last_checked": "2026-11-03",
+    "source_sha256": null,
+    "notes": "No source artifact checksum made."
+  }
+}
