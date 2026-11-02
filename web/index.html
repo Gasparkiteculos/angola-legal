@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Angola Legal — Pesquisa</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header><p class="eyebrow">ANGOLA LEGAL · v0.8.0</p><h1>Pesquisa jurídica</h1><p>Consulte metadados, relações documentadas e lacunas do catálogo.</p></header>
+  <main>
+    <section class="panel">
+      <form id="search-form">
+        <label>Termo de pesquisa<input id="query" type="search" placeholder="Número, título ou assunto"></label>
+        <div class="filters">
+          <label>Natureza<select id="nature"><option value="">Todas</option></select></label>
+          <label>Verificação<select id="verification"><option value="">Todas</option></select></label>
+          <label>Estado temporal<select id="temporal"><option value="">Todos</option></select></label>
+          <label>Instituição<select id="institution"><option value="">Todas</option></select></label>
+        </div>
+        <button type="submit">Pesquisar</button>
+      </form>
+    </section>
+    <section class="layout">
+      <div class="panel"><h2>Resultados <span id="count"></span></h2><div id="results" aria-live="polite"></div></div>
+      <aside class="panel"><h2>Cobertura</h2><div id="coverage"></div></aside>
+    </section>
+    <section class="panel"><h2>Relações documentadas</h2><p class="muted">Selecione “Ver relações” num registro. Correspondências sugeridas permanecem por verificar.</p><div id="graph"></div></section>
+  </main>
+  <footer>Metadados informativos. A situação temporal pode ser desconhecida; confirme sempre nas fontes oficiais.</footer>
+  <script src="/app.js"></script>
+</body>
+</html>
