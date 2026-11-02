@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only metadata search, version reporting and legal relationship graph."""
+"""Search, version, graph and integrity tools for Angola Legal metadata."""
 import argparse
 import json
 import re
@@ -8,9 +8,30 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORDS = ROOT / "records" / "angola"
+RELATIONS = {
+    "amends", "amended_by", "repeals", "repealed_by", "regulates", "implements",
+    "implemented_by", "complements", "complemented_by", "consolidates",
+    "consolidated_by", "revises", "revised_by", "republication_under",
+    "version_of", "related_to",
+}
+INVERSE = {
+    "amended_by": "amends",
+    "repealed_by": "repeals",
+    "implemented_by": "implements",
+    "complemented_by": "complements",
+    "consolidated_by": "consolidates",
+    "revised_by": "revises",
+}
+INSTRUMENT_PATTERN = re.compile(
+    r"\b(lei|decreto legislativo|decreto presidencial|decreto|"
+    r"resolu[cç][aã]o|rectifica[cç][aã]o|despacho)\s+n[.ºo°]*\s*"
+    r"\d+\s*/\s*\d{2,4}\b",
+    re.IGNORECASE,
+)
 
 def rows():
-    return [(path, json.loads(path.read_text(encoding="utf-8"))) for path in sorted(RECORDS.glob("*.json"))]
+    return [(path, json.loads(path.read_text(encoding="utf-8")))
+            for path in sorted(RECORDS.glob("*.json"))]
 
 def flatten(value):
     if isinstance(value, dict):
@@ -20,26 +41,50 @@ def flatten(value):
     return str(value)
 
 def normalize(value):
-    value = unicodedata.normalize("NFKD", value.casefold())
+    value = unicodedata.normalize("NFKD", str(value).casefold())
     value = "".join(char for char in value if not unicodedata.combining(char))
     return " ".join(re.findall(r"[a-z0-9]+", value))
 
-# Relations that point from the object back to the subject are reversed
-# during graph construction so that the edge describes the legal action.
-INVERSE = {
-    "amended_by": "amends",
-    "repealed_by": "repeals",
-    "implemented_by": "implements",
-    "complemented_by": "complements",
-    "consolidated_by": "consolidates",
-    "revised_by": "revises",
-}
-
-def relationship_graph():
-    records = rows()
-    nodes = {}
+def _index_records(records):
     aliases = {}
-    for _, record in records:
+    for record in records:
+        rid = record["record_id"]
+        values = (rid, record.get("title"), record.get("title_pt"),
+                  record.get("title_en"), record.get("official_identifier"))
+        for value in values:
+            if not value:
+                continue
+            aliases.setdefault(normalize(value), set()).add(rid)
+            for match in INSTRUMENT_PATTERN.finditer(value):
+                aliases.setdefault(normalize(match.group(0)), set()).add(rid)
+    return aliases
+
+def _resolve(reference, aliases):
+    key = normalize(reference)
+    exact = aliases.get(key, set())
+    if len(exact) == 1:
+        return next(iter(exact)), "resolved"
+    candidates = set()
+    if len(key) >= 8:
+        for alias, ids in aliases.items():
+            if len(alias) >= 8 and (key in alias or alias in key):
+                candidates.update(ids)
+    if len(candidates) == 1:
+        return next(iter(candidates)), "resolved"
+    return None, "ambiguous" if len(candidates) > 1 or len(exact) > 1 else "unresolved"
+
+def _assertions(record):
+    assertions = list(record.get("related_identifiers", []))
+    parent = record.get("versioning", {}).get("version_of")
+    if parent:
+        assertions.append({"scheme": "record_id", "value": parent, "relation": "version_of"})
+    return assertions
+
+def build_relationship_graph(records):
+    """Build a graph from record dictionaries, preserving assertion provenance."""
+    aliases = _index_records(records)
+    nodes = {}
+    for record in records:
         rid = record["record_id"]
         nodes[rid] = {
             "id": rid,
@@ -50,52 +95,26 @@ def relationship_graph():
             "source_url": record.get("source_url"),
             "resolved": True,
         }
-        values = (rid, record.get("title"), record.get("title_pt"),
-                  record.get("title_en"), record.get("official_identifier"))
-        for value in values:
-            if value:
-                aliases.setdefault(normalize(value), set()).add(rid)
-                # Index formal instrument numbers independently of Gazette citations.
-                pattern = r"\b(lei|decreto legislativo|decreto presidencial|decreto|resolu[cç][aã]o|rectifica[cç][aã]o|despacho)\s+n[.ºo°]*\s*\d+\s*/\s*\d{2,4}\b"
-                for match in re.finditer(pattern, value, re.IGNORECASE):
-                    aliases.setdefault(normalize(match.group(0)), set()).add(rid)
-
-    def resolve(reference):
-        key = normalize(reference)
-        exact = aliases.get(key, set())
-        if len(exact) == 1:
-            return next(iter(exact))
-        candidates = set()
-        if len(key) >= 8:
-            for alias, ids in aliases.items():
-                if len(alias) >= 8 and (key in alias or alias in key):
-                    candidates.update(ids)
-        return next(iter(candidates)) if len(candidates) == 1 else None
 
     edges = []
-    unresolved = {}
-    for _, record in records:
+    external_ids = {}
+    for record in records:
         source_id = record["record_id"]
-        assertions = list(record.get("related_identifiers", []))
-        version = record.get("versioning", {})
-        if version.get("version_of"):
-            assertions.append({
-                "scheme": "record_id",
-                "value": version["version_of"],
-                "relation": "version_of",
-            })
-        for item in assertions:
+        for item in _assertions(record):
             reference = item.get("value", "")
-            relation = item.get("relation", "related_to")
-            target_id = resolve(reference)
+            relation = item.get("relation") or "related_to"
+            target_id, resolution = _resolve(reference, aliases)
             if target_id is None:
-                key = normalize(reference) or reference
-                target_id = unresolved.setdefault(key, "external:" + key.replace(" ", "-"))
+                key = normalize(reference) or str(reference)
+                external_key = (resolution, key)
+                target_id = external_ids.setdefault(
+                    external_key, f"{resolution}:{key.replace(' ', '-')}"
+                )
                 nodes.setdefault(target_id, {
                     "id": target_id,
                     "title": reference,
                     "official_identifier": reference,
-                    "verification_status": "unresolved_reference",
+                    "verification_status": f"{resolution}_reference",
                     "temporal_status": "unknown",
                     "source_url": None,
                     "resolved": False,
@@ -114,22 +133,89 @@ def relationship_graph():
                 "assertion_verification": record.get("verification_status", "unknown"),
             })
 
-    # Keep repeated reciprocal statements as one edge while preserving all evidence.
     merged = {}
     for edge in edges:
         key = (edge["source"], edge["target"], edge["relation"])
         if key not in merged:
-            merged[key] = {**edge, "evidence": []}
+            merged[key] = {
+                "source": edge["source"], "target": edge["target"],
+                "relation": edge["relation"], "evidence": [],
+            }
         merged[key]["evidence"].append({
             "record_id": edge["asserted_by_record"],
             "url": edge["evidence_url"],
             "verification_status": edge["assertion_verification"],
         })
     return {
-        "schema_version": "1.0",
-        "scope": "records/angola JSON metadata; unresolved references are explicit",
+        "schema_version": "1.1",
+        "scope": "records/angola metadata; unresolved and ambiguous references are explicit",
         "nodes": sorted(nodes.values(), key=lambda node: node["id"]),
         "edges": [merged[key] for key in sorted(merged)],
+    }
+
+def relationship_graph():
+    return build_relationship_graph([record for _, record in rows()])
+
+def check_graph_integrity(records):
+    """Return errors/warnings for invalid, self, duplicate, or weakly evidenced edges."""
+    aliases = _index_records(records)
+    ids = {record.get("record_id") for record in records}
+    errors, warnings = [], []
+    seen = set()
+    for record in records:
+        rid = record.get("record_id")
+        for item in _assertions(record):
+            reference = str(item.get("value", "")).strip()
+            relation = item.get("relation") or "related_to"
+            if relation not in RELATIONS:
+                errors.append({"code": "invalid_relation", "record_id": rid,
+                               "relation": relation, "reference": reference})
+            if not reference:
+                errors.append({"code": "empty_reference", "record_id": rid})
+                continue
+            duplicate_key = (rid, relation, normalize(reference))
+            if duplicate_key in seen:
+                errors.append({"code": "duplicate_assertion", "record_id": rid,
+                               "relation": relation, "reference": reference})
+            seen.add(duplicate_key)
+            target, resolution = _resolve(reference, aliases)
+            if resolution == "ambiguous":
+                warnings.append({"code": "ambiguous_reference", "record_id": rid,
+                                 "reference": reference})
+            elif resolution == "unresolved":
+                warnings.append({"code": "unresolved_reference", "record_id": rid,
+                                 "reference": reference})
+            elif target == rid:
+                errors.append({"code": "self_reference", "record_id": rid,
+                               "relation": relation, "reference": reference})
+
+    graph = build_relationship_graph(records)
+    node_ids = {node["id"] for node in graph["nodes"]}
+    for edge in graph["edges"]:
+        if edge["source"] not in node_ids or edge["target"] not in node_ids:
+            errors.append({"code": "missing_endpoint", "edge": edge})
+        evidence = edge.get("evidence", [])
+        if not evidence:
+            errors.append({"code": "missing_provenance", "edge": edge})
+        for item in evidence:
+            if item.get("record_id") not in ids or not item.get("url", "").startswith("https://"):
+                errors.append({"code": "invalid_provenance", "evidence": item})
+        provenance_keys = [(item.get("record_id"), item.get("url")) for item in evidence]
+        if len(provenance_keys) != len(set(provenance_keys)):
+            errors.append({"code": "duplicate_provenance", "edge": edge})
+    return {
+        "status": "invalid" if errors else "pass",
+        "record_count": len(records),
+        "node_count": len(graph["nodes"]),
+        "edge_count": len(graph["edges"]),
+        "unresolved_reference_count": sum(
+            node["verification_status"] == "unresolved_reference" for node in graph["nodes"]
+        ),
+        "ambiguous_reference_count": sum(
+            node["verification_status"] == "ambiguous_reference" for node in graph["nodes"]
+        ),
+        "errors": errors,
+        "warnings": warnings,
     }
 
 def dot_escape(value):
@@ -142,8 +228,7 @@ def graph_dot(graph):
         style = "" if node["resolved"] else ', style="dashed", color="gray"'
         lines.append(f'  "{dot_escape(node["id"])}" [label="{dot_escape(node["title"])}"{style}];')
     for edge in graph["edges"]:
-        label = edge["relation"]
-        lines.append(f'  "{dot_escape(edge["source"])}" -> "{dot_escape(edge["target"])}" [label="{dot_escape(label)}"];')
+        lines.append(f'  "{dot_escape(edge["source"])}" -> "{dot_escape(edge["target"])}" [label="{dot_escape(edge["relation"])}"];')
     lines.append("}")
     return "\n".join(lines)
 
@@ -159,6 +244,7 @@ def main():
     compare.add_argument("right")
     graph = commands.add_parser("graph")
     graph.add_argument("--format", choices=("json", "dot"), default="json")
+    commands.add_parser("check-graph")
     args = parser.parse_args()
 
     if args.command == "search":
@@ -182,8 +268,7 @@ def main():
                 continue
             version = record.get("versioning", {})
             print(json.dumps({
-                "record_id": record["record_id"],
-                "version": version,
+                "record_id": record["record_id"], "version": version,
                 "parent_present": version.get("version_of") in ids if version.get("version_of") else None,
                 "related_identifiers": record.get("related_identifiers", []),
             }, ensure_ascii=False))
@@ -193,6 +278,11 @@ def main():
         result = relationship_graph()
         print(graph_dot(result) if args.format == "dot" else json.dumps(result, ensure_ascii=False, indent=2))
         return 0
+
+    if args.command == "check-graph":
+        result = check_graph_integrity([record for _, record in rows()])
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 1 if result["status"] == "invalid" else 0
 
     left = json.loads(Path(args.left).read_text(encoding="utf-8"))
     right = json.loads(Path(args.right).read_text(encoding="utf-8"))
