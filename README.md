@@ -37,7 +37,7 @@ A taxonomia é aberta: a inclusão não depende de o documento ser uma lei, mas 
 
 ## Repository status | Estado do repositório
 
-Version **0.5.0** adds a reproducible legal relationship graph from recorded metadata, with evidence-carrying edges, canonicalized inverse relations and explicit unresolved references. Local tools also search metadata, report versions and compare snapshots. They make no network requests and do not determine legal effect or current status.
+Version **0.6.0** adds unit tests and an integrity report for the legal relationship graph. The check rejects invalid relation terms, self-references, duplicate assertions and edges without provenance; it reports ambiguous and unresolved references for review. The graph retains evidence and does not determine legal effect or current status.
 
 The repository does **not** claim a complete or current consolidated corpus of Angolan legal materials. Legal-document verification records the evidence checked; temporal status remains separate and may be unknown. The earlier illustrative sample is fictional, not a real legal instrument.
 
@@ -62,6 +62,7 @@ python -m pip install -r requirements-dev.txt
 python scripts/validate_metadata.py records/examples/illustrative-record.json records/angola/*.json
 python scripts/validate_sources.py
 python -m unittest discover -s tests
+python scripts/catalog.py check-graph
 ```
 
 ## Contributing | Contribuir
