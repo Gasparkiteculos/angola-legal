@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Search, version, graph and integrity tools for Angola Legal metadata."""
 import argparse
+import difflib
 import json
 import re
 import unicodedata
@@ -12,7 +13,7 @@ RELATIONS = {
     "amends", "amended_by", "repeals", "repealed_by", "regulates", "implements",
     "implemented_by", "complements", "complemented_by", "consolidates",
     "consolidated_by", "revises", "revised_by", "republication_under",
-    "version_of", "related_to",
+    "republishes", "republished_by", "version_of", "related_to",
 }
 INVERSE = {
     "amended_by": "amends",
@@ -21,6 +22,7 @@ INVERSE = {
     "complemented_by": "complements",
     "consolidated_by": "consolidates",
     "revised_by": "revises",
+    "republished_by": "republishes",
 }
 INSTRUMENT_PATTERN = re.compile(
     r"\b(lei|decreto legislativo|decreto presidencial|decreto|"
@@ -82,6 +84,27 @@ def _resolve(reference, aliases):
             return None, "ambiguous"
     return None, "unresolved"
 
+def _suggest(reference, records, limit=3):
+    """Return similarity hints only; callers must never turn them into edges."""
+    query = normalize(reference)
+    if not query:
+        return []
+    aliases = _index_records(records)
+    scores = {}
+    for alias, record_ids in aliases.items():
+        if not alias:
+            continue
+        score = difflib.SequenceMatcher(None, query, alias).ratio()
+        for record_id in record_ids:
+            scores[record_id] = max(scores.get(record_id, 0.0), score)
+    ranked = sorted(
+        ((rid, score) for rid, score in scores.items() if score >= 0.72),
+        key=lambda item: (-item[1], item[0]),
+    )
+    return [{"record_id": rid, "similarity": round(score, 3),
+             "method": "normalized-text-similarity; suggestion-only"}
+            for rid, score in ranked[:limit]]
+
 def _assertions(record):
     assertions = list(record.get("related_identifiers", []))
     parent = record.get("versioning", {}).get("version_of")
@@ -127,6 +150,7 @@ def build_relationship_graph(records):
                     "temporal_status": "unknown",
                     "source_url": None,
                     "resolved": False,
+                    "suggested_matches": _suggest(reference, records),
                 })
             edge_source, edge_target = source_id, target_id
             canonical_relation = relation
@@ -158,6 +182,7 @@ def build_relationship_graph(records):
     return {
         "schema_version": "1.1",
         "scope": "records/angola metadata; unresolved and ambiguous references are explicit",
+        "resolution_policy": "unique exact identifiers create edges; similarity hints never resolve edges",
         "nodes": sorted(nodes.values(), key=lambda node: node["id"]),
         "edges": [merged[key] for key in sorted(merged)],
     }
@@ -227,6 +252,48 @@ def check_graph_integrity(records):
         "warnings": warnings,
     }
 
+def catalogue_coverage(coverage, records):
+    """Validate a manually scoped coverage ledger and summarize its target states."""
+    errors = []
+    record_map = {record.get("record_id"): record for record in records}
+    allowed = {"verified", "pending_verification", "not_located"}
+    counts = {status: 0 for status in sorted(allowed)}
+    targets = []
+    seen = set()
+    for item in coverage.get("targets", []):
+        target_id = item.get("id")
+        status = item.get("status")
+        if target_id in seen:
+            errors.append({"code": "duplicate_coverage_target", "id": target_id})
+        seen.add(target_id)
+        if status not in allowed:
+            errors.append({"code": "invalid_coverage_status", "id": target_id, "status": status})
+        else:
+            counts[status] += 1
+        record_id = item.get("record_id")
+        if status == "verified":
+            record = record_map.get(record_id)
+            if not record or record.get("verification_status") != "verified":
+                errors.append({"code": "verified_target_missing_record", "id": target_id,
+                               "record_id": record_id})
+        elif record_id is not None:
+            errors.append({"code": "nonverified_target_has_record", "id": target_id,
+                           "record_id": record_id})
+        targets.append(item)
+    return {
+        "schema_version": "1.0",
+        "reviewed_on": coverage.get("reviewed_on"),
+        "scope_note": coverage.get("scope_note"),
+        "status": "invalid" if errors else "pass",
+        "target_counts": counts,
+        "catalogue_record_count": len(records),
+        "verified_record_count": sum(
+            record.get("verification_status") == "verified" for record in records
+        ),
+        "targets": targets,
+        "errors": errors,
+    }
+
 def dot_escape(value):
     return str(value or "").replace("\\", "\\\\").replace('"', '\\"').replace("\n", " ")
 
@@ -254,6 +321,7 @@ def main():
     graph = commands.add_parser("graph")
     graph.add_argument("--format", choices=("json", "dot"), default="json")
     commands.add_parser("check-graph")
+    commands.add_parser("coverage")
     args = parser.parse_args()
 
     if args.command == "search":
@@ -290,6 +358,13 @@ def main():
 
     if args.command == "check-graph":
         result = check_graph_integrity([record for _, record in rows()])
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 1 if result["status"] == "invalid" else 0
+
+    if args.command == "coverage":
+        coverage_path = ROOT / "coverage" / "catalogue-coverage.json"
+        coverage = json.loads(coverage_path.read_text(encoding="utf-8"))
+        result = catalogue_coverage(coverage, [record for _, record in rows()])
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 1 if result["status"] == "invalid" else 0
 
