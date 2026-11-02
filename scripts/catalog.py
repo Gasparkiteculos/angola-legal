@@ -50,10 +50,15 @@ def relationship_graph():
             "source_url": record.get("source_url"),
             "resolved": True,
         }
-        for value in (rid, record.get("title"), record.get("title_pt"),
-                      record.get("title_en"), record.get("official_identifier")):
+        values = (rid, record.get("title"), record.get("title_pt"),
+                  record.get("title_en"), record.get("official_identifier"))
+        for value in values:
             if value:
                 aliases.setdefault(normalize(value), set()).add(rid)
+                # Index formal instrument numbers independently of Gazette citations.
+                pattern = r"\b(lei|decreto legislativo|decreto presidencial|decreto|resolu[cç][aã]o|rectifica[cç][aã]o|despacho)\s+n[.ºo°]*\s*\d+\s*/\s*\d{2,4}\b"
+                for match in re.finditer(pattern, value, re.IGNORECASE):
+                    aliases.setdefault(normalize(match.group(0)), set()).add(rid)
 
     def resolve(reference):
         key = normalize(reference)
