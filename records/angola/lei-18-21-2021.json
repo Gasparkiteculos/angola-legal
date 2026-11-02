@@ -1,0 +1,63 @@
+{
+  "record_id": "al:ao:lei-18-21-2021",
+  "title": "Lei n.º 18/21, de 16 de Agosto — Lei de Revisão Constitucional",
+  "title_pt": "Lei n.º 18/21, de 16 de Agosto — Lei de Revisão Constitucional",
+  "title_en": "Law No. 18/21 of 16 August — Constitutional Revision Law",
+  "document_nature": "legislation",
+  "document_nature_detail": "Constitutional amendment law",
+  "legal_force": "binding",
+  "temporal_status": "unknown",
+  "verification_status": "verified",
+  "issuing_authority": "Assembleia Nacional",
+  "territorial_scope": "National — Republic of Angola",
+  "subject_matter": ["constitutional law"],
+  "jurisdiction": "AO",
+  "language": ["pt"],
+  "date_issued": "2021-08-16",
+  "date_published": "2021-08-16",
+  "effective_from": null,
+  "effective_until": null,
+  "official_identifier": "Lei n.º 18/21, de 16 de Agosto; Diário da República, I Série, n.º 154, de 16 de Agosto de 2021",
+  "related_identifiers": [
+    {
+      "scheme": "record_id",
+      "value": "al:ao:constituicao-2010-republicacao-lei-18-21",
+      "relation": "amends"
+    },
+    {
+      "scheme": "record_id",
+      "value": "al:ao:constituicao-2010-republicacao-lei-18-21",
+      "relation": "republishes"
+    }
+  ],
+  "source_url": "https://portaladmin.parlamento.ao/storage/dropzone/image/2023_08_01/20230801_134612_CONSTITUI%C3%87%C3%83O%20DA%20REP%C3%9ABLICA%20DE%20ANGOLA%202010%20%28Rep%C3%BAblica%C3%A7%C3%A3o%29.pdf",
+  "source_name": "Assembleia Nacional — publicação da Constituição republicada com a Lei n.º 18/21",
+  "accessed_at": "2026-11-03",
+  "reuse_rights": {
+    "status": "restricted",
+    "license": null,
+    "evidence": "Ficha técnica da publicação da Assembleia Nacional declara que reprodução ou transmissão integral/parcial depende de autorização prévia.",
+    "notes": "Apenas metadados e ligação são registados; o texto e o PDF não são redistribuídos."
+  },
+  "provenance": {
+    "source_description": "PDF institucional da Assembleia Nacional identifica a Lei n.º 18/21, de 16 de Agosto, como Lei de Revisão Constitucional e lista alterações e aditamentos à Constituição. O Tribunal Constitucional identifica a publicação no Diário da República, I Série, n.º 154, da mesma data.",
+    "collected_at": "2026-11-03",
+    "method": "Inspeção do PDF oficial da Assembleia Nacional e confirmação institucional pelo portal do Tribunal Constitucional.",
+    "contributor": "Angola Legal project"
+  },
+  "summary": "Diploma de revisão constitucional que altera a Constituição e é indicado pela Assembleia Nacional como fundamento da republicação constitucional.",
+  "notes": [
+    "A vigência temporal atual e os efeitos de cada disposição não foram auditados.",
+    "A data de publicação não é tratada como prova da data de entrada em vigor."
+  ],
+  "versioning": {
+    "version_label": "official-gazette-publication",
+    "version_of": null,
+    "version_type": "original",
+    "evidence_url": "https://portaladmin.parlamento.ao/storage/dropzone/image/2023_08_01/20230801_134612_CONSTITUI%C3%87%C3%83O%20DA%20REP%C3%9ABLICA%20DE%20ANGOLA%202010%20%28Rep%C3%BAblica%C3%A7%C3%A3o%29.pdf",
+    "change_status": "not_monitored",
+    "last_checked": "2026-11-03",
+    "source_sha256": null,
+    "notes": "A publicação oficial foi verificada; não se certifica aqui a vigência atual."
+  }
+}
