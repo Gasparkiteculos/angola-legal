@@ -109,6 +109,15 @@ class RelationshipGraphTests(unittest.TestCase):
         self.assertEqual(external["id"], edge["target"])
         self.assertIn("suggestion-only", external["suggested_matches"][0]["method"])
 
+    def test_coverage_schema_accepts_ledger_and_rejects_missing_verified_record(self):
+        schema = json.loads((ROOT / "schemas/catalogue-coverage.schema.json").read_text(encoding="utf-8"))
+        ledger = json.loads((ROOT / "coverage/catalogue-coverage.json").read_text(encoding="utf-8"))
+        validator = Draft202012Validator(schema)
+        self.assertFalse(list(validator.iter_errors(ledger)))
+        invalid = copy.deepcopy(ledger)
+        invalid["targets"][0]["record_id"] = None
+        self.assertTrue(list(validator.iter_errors(invalid)))
+
     def test_coverage_report_requires_verified_record_and_null_for_other_states(self):
         ledger = {"reviewed_on": "2026-11-03", "scope_note": "bounded", "targets": [
             {"id": "present", "status": "verified", "record_id": "al:ao:law"},
