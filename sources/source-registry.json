@@ -154,21 +154,6 @@
       "evidence_url": "https://au.int/en/treaties"
     },
     {
-      "id": "candidate-imprensa-nacional",
-      "source_name": "Imprensa Nacional, E.P. — II/III Série access route",
-      "institution": "Imprensa Nacional, E.P.",
-      "official_url": "https://www.imprensanacional.gov.ao/",
-      "source_type": "candidate_official_publisher",
-      "jurisdiction_coverage": "Potential Diário da República II and III Series; not established",
-      "access_method": "Portal URL tested; direct request timed out; DRON states II/III series remain in usual Imprensa Nacional channels",
-      "observed_availability": "Unreachable by our browser check on 2026-11-03 (timeout); no content verified",
-      "retrieval_date": "2026-11-03",
-      "reliability_notes": "Candidate only. DRON's statement supports a follow-up lead but does not confirm this URL, access path, current availability, or legal authority of a specific page.",
-      "reuse_copyright_notes": "No content collected. Confirm source identity, conditions, and item rights before use.",
-      "verification_status": "candidate_discovery_only",
-      "evidence_url": "https://diariodarepublica.gov.ao/"
-    },
-    {
       "id": "candidate-angolex",
       "source_name": "Angolex — legal search/discovery index",
       "institution": "Private/non-governmental website (institutional ownership not verified)",
