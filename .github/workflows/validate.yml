@@ -42,3 +42,4 @@ jobs:
       - run: python scripts/catalog.py check-graph
       - run: python scripts/catalog.py coverage
       - run: python -m py_compile scripts/api.py scripts/catalog.py
+      - run: node --check web/app.js
