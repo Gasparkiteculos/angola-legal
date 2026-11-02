@@ -17,3 +17,7 @@ Run `python scripts/catalog.py diff OLD.json NEW.json` to compare metadata snaps
 6. For comparison, hash only lawfully accessed artifacts; store digest and check date, and do not retain copies unless permitted. A changed file is not itself a legal change.
 
 Automated metadata checks do not determine legal status. Human review remains necessary; this catalogue is not legal advice.
+
+
+## Legal relationship graph
+Run `python scripts/catalog.py graph --format json` for a machine-readable graph or `python scripts/catalog.py graph --format dot` for Graphviz DOT. Edges retain the record making the assertion, its evidence URL and verification label. Reciprocal `amends`/`amended_by` declarations are normalized and merged without discarding evidence. A reference that does not resolve uniquely to a catalogue record is emitted as an unresolved external node. This is a graph of recorded metadata and evidence, not a legal opinion or an exhaustive statement of the law.
