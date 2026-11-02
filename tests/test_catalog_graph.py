@@ -132,7 +132,7 @@ class RelationshipGraphTests(unittest.TestCase):
         ledger["targets"][1]["record_id"] = "al:ao:law"
         report = catalog.catalogue_coverage(ledger, records)
         self.assertEqual("invalid", report["status"])
-        self.assertEqual(1, len(report["errors"]))
+        self.assertEqual({"verified_target_missing_record", "nonverified_target_has_record"}, {error["code"] for error in report["errors"]})
 
 if __name__ == "__main__":
     unittest.main()
