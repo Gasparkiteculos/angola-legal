@@ -2,6 +2,14 @@
 
 All notable project changes are recorded here.
 
+## [0.8.0] - 2026-11-03
+
+- Added an independent, read-only JSON API for health, search/filtering, facets, document records, graph neighborhoods and coverage.
+- Added a small responsive browser interface for filtered catalogue search, provenance-linked relationship exploration and coverage counts.
+- Kept similarity hints and unresolved references explicit; API output preserves edge evidence and status dimensions.
+- Added API unit tests, CI checks and local run instructions. No HTTP API hosting or public deployment is claimed.
+
+
 ## [0.7.0] - 2026-11-03
 
 - Added verified metadata for Lei n.º 18/21 from an official Assembleia Nacional publication and linked its amendment/republication relationship to the Constitution republication record.
