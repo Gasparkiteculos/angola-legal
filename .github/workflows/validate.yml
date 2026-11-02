@@ -11,6 +11,9 @@ on:
       - "web/**"
       - "docs/**"
       - "requirements-dev.txt"
+      - "VERSION"
+      - "README.md"
+      - "CHANGELOG.md"
       - ".github/workflows/validate.yml"
   pull_request:
     paths:
@@ -20,6 +23,9 @@ on:
       - "scripts/**"
       - "tests/**"
       - "requirements-dev.txt"
+      - "VERSION"
+      - "README.md"
+      - "CHANGELOG.md"
       - ".github/workflows/validate.yml"
   workflow_dispatch:
 
