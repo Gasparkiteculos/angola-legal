@@ -1,0 +1,64 @@
+{
+  "record_id": "al:ao:constituicao-2010-republicacao-lei-18-21",
+  "title": "Constituição da República de Angola (republicação nos termos da Lei n.º 18/21)",
+  "title_pt": "Constituição da República de Angola (republicação nos termos da Lei n.º 18/21)",
+  "title_en": "Constitution of the Republic of Angola (republication under Law No. 18/21)",
+  "document_nature": "constitution",
+  "document_nature_detail": "Constitutional text in the republication identified by the National Assembly digital library",
+  "legal_force": "binding",
+  "temporal_status": "unknown",
+  "verification_status": "verified",
+  "issuing_authority": "Assembleia Nacional",
+  "territorial_scope": "National — Republic of Angola",
+  "subject_matter": [
+    "constitutional law",
+    "state organisation",
+    "fundamental rights"
+  ],
+  "jurisdiction": "AO",
+  "language": [
+    "pt"
+  ],
+  "date_issued": null,
+  "date_published": null,
+  "effective_from": null,
+  "effective_until": null,
+  "official_identifier": "Constituição da República de Angola (2010), republicação nos termos do artigo 4.º da Lei n.º 18/21, de 16 de Agosto",
+  "related_identifiers": [
+    {
+      "scheme": "Angola legal instrument",
+      "value": "Lei n.º 18/21, de 16 de Agosto",
+      "relation": "republication_under"
+    }
+  ],
+  "source_url": "https://bi-digital.parlamento.ao/items/885395b6-825d-4605-89f7-2d44f9bdc039",
+  "source_name": "Biblioteca Digital da Assembleia Nacional",
+  "accessed_at": "2026-11-03",
+  "reuse_rights": {
+    "status": "link_only",
+    "license": null,
+    "evidence": "No explicit redistribution licence was confirmed.",
+    "notes": "Metadata and source link only; no source text or PDF is redistributed."
+  },
+  "provenance": {
+    "source_description": "Official item identifies Assembleia Nacional as author/publisher and describes this file as a republication under Article 4 of Lei n.º 18/21.",
+    "collected_at": "2026-11-03",
+    "method": "Inspected official item metadata and full metadata page; did not treat year-only item date as a Gazette publication date.",
+    "contributor": "Angola Legal project"
+  },
+  "summary": "Constitutional text presented by the Assembleia Nacional digital library as a republication under Lei n.º 18/21.",
+  "notes": [
+    "Temporal status and subsequent amendment/corrigendum chain have not been fully audited.",
+    "Publication date is not treated as proof of present force or commencement."
+  ],
+  "versioning": {
+    "version_label": "republication-under-lei-18-21",
+    "version_of": "al:ao:constituicao-2010",
+    "version_type": "republication",
+    "evidence_url": "https://bi-digital.parlamento.ao/items/885395b6-825d-4605-89f7-2d44f9bdc039",
+    "change_status": "not_monitored",
+    "last_checked": "2026-11-03",
+    "source_sha256": null,
+    "notes": "Original-version record is not yet in catalogue. Item-specific licence terms were not inspected."
+  }
+}
