@@ -68,14 +68,19 @@ def _resolve(reference, aliases):
     exact = aliases.get(key, set())
     if len(exact) == 1:
         return next(iter(exact)), "resolved"
-    candidates = set()
-    if len(key) >= 8:
-        for alias, ids in aliases.items():
-            if len(alias) >= 8 and (key in alias or alias in key):
-                candidates.update(ids)
-    if len(candidates) == 1:
-        return next(iter(candidates)), "resolved"
-    return None, "ambiguous" if len(candidates) > 1 or len(exact) > 1 else "unresolved"
+    if len(exact) > 1:
+        return None, "ambiguous"
+    # Match by the first formal instrument identifier in the reference. Avoid
+    # substring matching against titles, where a cited parent law can look like
+    # the identity of the citing document itself.
+    match = INSTRUMENT_PATTERN.search(str(reference))
+    if match:
+        candidates = aliases.get(normalize(match.group(0)), set())
+        if len(candidates) == 1:
+            return next(iter(candidates)), "resolved"
+        if len(candidates) > 1:
+            return None, "ambiguous"
+    return None, "unresolved"
 
 def _assertions(record):
     assertions = list(record.get("related_identifiers", []))
