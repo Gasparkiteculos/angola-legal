@@ -98,7 +98,7 @@ class RelationshipGraphTests(unittest.TestCase):
     def test_similarity_suggestion_never_resolves_or_confirms_edge(self):
         known = record("al:ao:law-18", "Lei n.º 18/21, de 16 de Agosto")
         citing = record("al:ao:citing", "Constituição", [{
-            "scheme": "law", "value": "Lei n.º 18/21 de 16 Agosto", "relation": "amends"
+            "scheme": "law", "value": "Lei n.º 18/22 de 16 Agosto", "relation": "amends"
         }])
         graph = catalog.build_relationship_graph([known, citing])
         external = next(node for node in graph["nodes"] if not node["resolved"])
