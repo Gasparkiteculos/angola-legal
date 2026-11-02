@@ -53,12 +53,12 @@
   ],
   "versioning": {
     "version_label": "republication-under-lei-18-21",
-    "version_of": "al:ao:constituicao-2010",
+    "version_of": null,
     "version_type": "republication",
     "evidence_url": "https://bi-digital.parlamento.ao/items/885395b6-825d-4605-89f7-2d44f9bdc039",
     "change_status": "not_monitored",
     "last_checked": "2026-11-03",
     "source_sha256": null,
-    "notes": "Original-version record is not yet in catalogue. Item-specific licence terms were not inspected."
+    "notes": "The original-version record is not yet in the catalogue. Item-specific licence terms were not inspected."
   }
 }
