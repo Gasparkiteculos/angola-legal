@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import mimetypes
 import re
+from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlsplit
@@ -66,10 +67,19 @@ def search_documents(records, params):
         )})
     matched.sort(key=lambda item: (item.get("date_published") or "", item["record_id"]), reverse=True)
     try:
-        limit = min(max(int(params.get("limit", ["20"])[0]), 1), 100)
-        offset = max(int(params.get("offset", ["0"])[0]), 0)
+        limit = int(params.get("limit", ["20"])[0])
+        offset = int(params.get("offset", ["0"])[0])
     except (TypeError, ValueError):
-        raise ValueError("limit and offset must be non-negative integers")
+        raise ValueError("limit and offset must be integers")
+    if limit < 1 or limit > 100 or offset < 0:
+        raise ValueError("limit must be 1-100 and offset must be non-negative")
+    for param in ("date_from", "date_to"):
+        value = params.get(param, [None])[0]
+        if value:
+            try:
+                date.fromisoformat(value)
+            except ValueError as exc:
+                raise ValueError(f"{param} must use YYYY-MM-DD") from exc
     return {"total": len(matched), "limit": limit, "offset": offset,
             "results": matched[offset:offset + limit]}
 
