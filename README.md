@@ -37,7 +37,7 @@ A taxonomia é aberta: a inclusão não depende de o documento ser uma lei, mas 
 
 ## Repository status | Estado do repositório
 
-Version **0.4.0** adds verified metadata records for the Constitution republication identified by the Assembleia Nacional digital library and Lei n.º 12/23 (General Labour Law), alongside the initial Penal Code instruments. Local tools search metadata, list version links and compare snapshots. They do not fetch source documents or establish current legal status; the repository stores links and metadata only.
+Version **0.5.0** adds a reproducible legal relationship graph from recorded metadata, with evidence-carrying edges, canonicalized inverse relations and explicit unresolved references. Local tools also search metadata, report versions and compare snapshots. They make no network requests and do not determine legal effect or current status.
 
 The repository does **not** claim a complete or current consolidated corpus of Angolan legal materials. Legal-document verification records the evidence checked; temporal status remains separate and may be unknown. The earlier illustrative sample is fictional, not a real legal instrument.
 
@@ -51,7 +51,7 @@ The repository does **not** claim a complete or current consolidated corpus of A
 - `docs/SOURCE-DISCOVERY.md` — verification, reliability, collection workflow and safeguards;
 - `sources/source-registry.json` and `schemas/source-registry.schema.json` — source inventory and schema;
 - `docs/RECORD-CATALOG.md` and `records/angola/` — catalogue, provenance and document records;
-- `docs/SEARCH-VERSIONS.md` and `scripts/catalog.py` — local metadata search, version reporting and snapshot comparison;
+- `docs/SEARCH-VERSIONS.md`, `docs/DATA-MODEL.md` and `scripts/catalog.py` — graph, local metadata search, version reporting and snapshot comparison;
 - `docs/SPECIFICATION.md`, `docs/LEGAL-TAXONOMY.md`, `docs/DATA-MODEL.md`;
 - `docs/EDITORIAL-POLICY.md`, `docs/ARCHITECTURE.md`, `CONTRIBUTING.md`, `DATA-LICENSE.md`.
 
