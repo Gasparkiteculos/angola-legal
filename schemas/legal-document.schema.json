@@ -284,6 +284,76 @@
       "items": {
         "type": "string"
       }
+    },
+    "versioning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version_label",
+        "version_type",
+        "change_status"
+      ],
+      "properties": {
+        "version_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version_of": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version_type": {
+          "type": "string",
+          "enum": [
+            "original",
+            "amendment",
+            "corrigendum",
+            "repeal",
+            "consolidation",
+            "republication",
+            "unknown"
+          ]
+        },
+        "evidence_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "change_status": {
+          "type": "string",
+          "enum": [
+            "not_monitored",
+            "unchanged",
+            "changed",
+            "unavailable",
+            "unknown"
+          ]
+        },
+        "last_checked": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "source_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
     }
   }
 }
