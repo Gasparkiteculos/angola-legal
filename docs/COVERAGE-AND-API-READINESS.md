@@ -25,3 +25,16 @@ python scripts/catalog.py coverage
 ```
 
 The report validates references against verified catalogue records and returns counts by status. CI also validates the coverage JSON Schema. No legal text or PDF is redistributed by the ledger.
+
+## Read-only API v1
+
+Start the local development server with `python scripts/api.py`; it binds to `127.0.0.1:8000` by default. The server is read-only and serves the browser client separately from its JSON routes. This is a local reference implementation, not a hosted production service.
+
+- `GET /api/v1/health` — API version and health.
+- `GET /api/v1/search?q=lei&nature=legislation&institution=Assembleia%20Nacional&legal_force=binding&temporal_status=unknown&verification_status=verified&subject=constitucional&date_from=2021-01-01&date_to=2026-12-31&limit=20&offset=0` — search/filter and paginated metadata.
+- `GET /api/v1/facets` — available filter values.
+- `GET /api/v1/documents/{record_id}` — one complete metadata record.
+- `GET /api/v1/graph?record_id={record_id}&depth=1` — graph neighborhood (depth capped at three); omit record ID for the full graph.
+- `GET /api/v1/coverage` — scoped counts and target states.
+
+Responses are JSON. Unknown routes/documents return 404; invalid pagination/depth returns 400. The API exposes source URLs and relationship evidence, and does not serve or proxy source texts/PDFs. It offers no write endpoints. The browser interface consumes this API and may be replaced without changing the route/data contract. Before public deployment, place it behind a production-grade server and review operational security, availability, rate limits and cross-origin policy.
