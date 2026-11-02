@@ -1,0 +1,45 @@
+{
+  "record_id": "al:example:fictional-001",
+  "title": "Fictional example instrument — not a real legal document",
+  "title_pt": "Instrumento fictício de exemplo — não é um documento jurídico real",
+  "title_en": "Fictional example instrument — not a real legal document",
+  "document_nature": "legislation",
+  "document_nature_detail": "Illustrative schema example only",
+  "legal_force": "unknown",
+  "temporal_status": "unknown",
+  "verification_status": "unverified",
+  "issuing_authority": null,
+  "territorial_scope": "unknown",
+  "subject_matter": [
+    "example"
+  ],
+  "jurisdiction": "AO",
+  "language": [
+    "pt"
+  ],
+  "date_issued": null,
+  "date_published": null,
+  "effective_from": null,
+  "effective_until": null,
+  "official_identifier": null,
+  "related_identifiers": [],
+  "source_url": null,
+  "source_name": null,
+  "accessed_at": null,
+  "reuse_rights": {
+    "status": "project_metadata_cc0",
+    "license": "CC0-1.0",
+    "evidence": "Authored solely as a fictional project example.",
+    "notes": "Contains no real legal text."
+  },
+  "provenance": {
+    "source_description": "Created by the project solely to illustrate metadata structure.",
+    "collected_at": null,
+    "method": "Fictional example; not sourced from an instrument.",
+    "contributor": "Angola Legal project"
+  },
+  "summary": "Fictional placeholder demonstrating independent metadata dimensions. Not law and not evidence of any legal rule.",
+  "notes": [
+    "Never cite or interpret this record as a real act."
+  ]
+}
