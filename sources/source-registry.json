@@ -1,6 +1,6 @@
 {
   "$schema": "../schemas/source-registry.schema.json",
-  "registry_version": "1.0.0",
+  "registry_version": "1.1.0",
   "retrieval_date": "2026-11-03",
   "sources": [
     {
@@ -47,6 +47,21 @@
       "verification_status": "confirmed_official",
       "evidence_url": "https://bi-digital.parlamento.ao/home",
       "source_url": "https://bi-digital.parlamento.ao/home"
+    },
+    {
+      "id": "ao-assembleia-lei18",
+      "source_name": "Assembleia Nacional — PDF da Constituição republicada e Lei n.º 18/21",
+      "institution": "Assembleia Nacional de Angola",
+      "source_type": "official_legislative_publication",
+      "jurisdiction_coverage": "Angola; Lei n.º 18/21 e republicação da Constituição",
+      "access_method": "PDF público ligado no domínio institucional portaladmin.parlamento.ao",
+      "observed_availability": "PDF oficial acessível e inspecionado em 2026-11-03; inclui ficha técnica, Lei n.º 18/21 e republicação constitucional",
+      "retrieval_date": "2026-11-03",
+      "reliability_notes": "Fonte institucional primária para o documento ali publicado. Confirma identidade e relação da republicação; não estabelece, por si só, a vigência atual de cada norma.",
+      "reuse_copyright_notes": "A ficha técnica proíbe reprodução/transmissão sem autorização prévia da Assembleia Nacional. Registar apenas metadados e ligação.",
+      "verification_status": "confirmed_official",
+      "evidence_url": "https://portaladmin.parlamento.ao/storage/dropzone/image/2023_08_01/20230801_134612_CONSTITUI%C3%87%C3%83O%20DA%20REP%C3%9ABLICA%20DE%20ANGOLA%202010%20%28Rep%C3%BAblica%C3%A7%C3%A3o%29.pdf",
+      "source_url": "https://portaladmin.parlamento.ao/storage/dropzone/image/2023_08_01/20230801_134612_CONSTITUI%C3%87%C3%83O%20DA%20REP%C3%9ABLICA%20DE%20ANGOLA%202010%20%28Rep%C3%BAblica%C3%A7%C3%A3o%29.pdf"
     },
     {
       "id": "ao-tc",
