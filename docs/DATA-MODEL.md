@@ -29,3 +29,8 @@ Optional fields include issuer, territorial scope, subject matter, language, dat
 ## Example
 
 `records/examples/illustrative-record.json` is intentionally fictitious and contains no real legal text.
+
+
+## Legal relationship graph
+
+`python scripts/catalog.py graph --format json` builds a deterministic graph from `related_identifiers` and any explicit `versioning.version_of` links. Use `--format dot` to produce Graphviz DOT. Edges carry the asserting record, source URL and verification label. Inverse pairs such as `amended_by`/`amends` are normalized to a consistent action direction and duplicate reciprocal assertions are combined while retaining both evidence references. Ambiguous or unrepresented targets appear as dashed/external nodes with `resolved: false`; they are not silently discarded or treated as verified documents. The graph represents catalogued assertions and coverage only; it does not infer legal effects, validity or current force.
