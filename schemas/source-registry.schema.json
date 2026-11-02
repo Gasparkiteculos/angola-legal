@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Gasparkiteculos/angola-legal/blob/main/schemas/source-registry.schema.json",
+  "title": "Angola Legal source registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "registry_version",
+    "retrieval_date",
+    "sources"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "registry_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "retrieval_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source_name",
+        "institution",
+        "official_url",
+        "source_type",
+        "jurisdiction_coverage",
+        "access_method",
+        "observed_availability",
+        "retrieval_date",
+        "reliability_notes",
+        "reuse_copyright_notes",
+        "verification_status",
+        "evidence_url"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "institution": {
+          "type": "string",
+          "minLength": 1
+        },
+        "official_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "source_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "jurisdiction_coverage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access_method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observed_availability": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retrieval_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "reliability_notes": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reuse_copyright_notes": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_status": {
+          "enum": [
+            "confirmed_official",
+            "candidate_discovery_only"
+          ]
+        },
+        "evidence_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  }
+}
