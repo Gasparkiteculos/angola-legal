@@ -1,0 +1,54 @@
+{
+  "record_id": "al:ao:lei-12-24-2024",
+  "title": "Lei n.º 12/24 — Altera a Lei n.º 38/20, que aprova o Código Penal Angolano",
+  "title_pt": "Lei n.º 12/24 — Altera a Lei n.º 38/20, que aprova o Código Penal Angolano",
+  "title_en": "Law No. 12/24 amending Law No. 38/20 approving the Angolan Penal Code",
+  "document_nature": "legislation",
+  "document_nature_detail": "Amending law concerning the Penal Code",
+  "legal_force": "binding",
+  "temporal_status": "unknown",
+  "verification_status": "verified",
+  "issuing_authority": "Assembleia Nacional",
+  "territorial_scope": "National — Republic of Angola",
+  "subject_matter": [
+    "criminal law",
+    "penal code",
+    "statutory amendment"
+  ],
+  "jurisdiction": "AO",
+  "language": [
+    "pt"
+  ],
+  "date_issued": "2024-07-04",
+  "date_published": "2024-07-04",
+  "effective_from": "2024-07-04",
+  "effective_until": null,
+  "official_identifier": "Lei n.º 12/24; Diário da República, I Série, n.º 126, de 4 de Julho de 2024",
+  "related_identifiers": [
+    {
+      "scheme": "Angola legal instrument",
+      "value": "Lei n.º 38/20, de 11 de Novembro de 2020",
+      "relation": "amends"
+    }
+  ],
+  "source_url": "https://tribunalsupremo.ao/wp-content/uploads/2024/08/Lei-que-altera-a-Lei-n.o-38-20-de-11-de-Novembro.pdf",
+  "source_name": "Facsimile of Diário da República, I Série n.º 126, hosted on the Tribunal Supremo official portal",
+  "accessed_at": "2026-11-03",
+  "reuse_rights": {
+    "status": "link_only",
+    "license": null,
+    "evidence": "No explicit redistribution licence was confirmed for the facsimile.",
+    "notes": "This repository stores metadata and a link only; the Gazette text is not reproduced."
+  },
+  "provenance": {
+    "source_description": "The Tribunal Supremo portal hosts the PDF facsimile. Its masthead identifies Diário da República, I Série, n.º 126, Thursday 4 July 2024; the contents and Article 1 identify Lei n.º 12/24 as amending Lei n.º 38/20.",
+    "collected_at": "2026-11-03",
+    "method": "Opened the PDF hosted on the official Tribunal Supremo domain; checked the Gazette masthead, contents, law number/date, amendment provision (Articles 1–2), repeal provision (Article 3), and commencement provision (Article 5).",
+    "contributor": "Angola Legal project"
+  },
+  "summary": "Amends specified provisions of the Angolan Penal Code approved by Lei n.º 38/20 and repeals specified provisions of that law and of the Code. Article 5 states that it enters into force on the date of publication.",
+  "notes": [
+    "The source establishes the law’s publication date and its express commencement clause. The record’s current temporal status remains unknown because a broader repeal/amendment audit has not been completed.",
+    "The relation to Lei n.º 38/20 is confirmed by the title and Articles 1–3 of this Gazette text."
+  ]
+}
