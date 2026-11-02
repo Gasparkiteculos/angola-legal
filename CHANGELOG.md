@@ -2,6 +2,14 @@
 
 All notable project changes are recorded here.
 
+## [0.4.0] - 2026-11-03
+
+- Added verified metadata records for the Constitution republication identified by the National Assembly digital library and Lei n.º 12/23 from the MAPTSS LGT portal.
+- Added optional version/monitoring metadata, local metadata search, version listing and snapshot comparison.
+- Documented identity, deduplication, provenance, change checks and safeguards; no legal text or PDF was copied.
+- Civil, commercial, tax, administrative, family and procedure areas remain gaps pending primary-source verification.
+
+
 ## [0.3.0] - 2026-11-03
 
 - Added verified metadata records for Lei n.º 38/20 and its amending Lei n.º 12/24, with source links and a bidirectional amendment relationship.
