@@ -1,0 +1,20 @@
+{
+  "$schema": "../schemas/catalogue-coverage.schema.json",
+  "schema_version": "1.0",
+  "reviewed_on": "2026-11-03",
+  "scope_note": "Bilingual-project scope sample, not a census of Angolan law. Status describes this review's evidence for listed targets only; not_located means no authoritative item was identified in this bounded review, not that no such law exists.",
+  "targets": [
+    {"id": "constitution-republication", "label": "Constituição da República de Angola (republicação sob Lei n.º 18/21)", "status": "verified", "record_id": "al:ao:constituicao-2010-republicacao-lei-18-21", "notes": "Republication identified by the Assembleia Nacional; current temporal status remains unknown."},
+    {"id": "lei-18-21", "label": "Lei n.º 18/21, de 16 de Agosto", "status": "verified", "record_id": "al:ao:lei-18-21-2021", "notes": "Publicação e identidade confirmadas em fonte institucional."},
+    {"id": "lei-38-20", "label": "Lei n.º 38/20", "status": "verified", "record_id": "al:ao:lei-38-20-2020", "notes": "Registro existente; vigência atual não presumida."},
+    {"id": "lei-12-24", "label": "Lei n.º 12/24", "status": "verified", "record_id": "al:ao:lei-12-24-2024", "notes": "Registro existente; vigência atual não presumida."},
+    {"id": "lei-12-23", "label": "Lei Geral do Trabalho, Lei n.º 12/23", "status": "verified", "record_id": "al:ao:lei-12-23-2023", "notes": "Registro existente; vigência atual não presumida."},
+    {"id": "codigo-processo-civil", "label": "Código de Processo Civil", "status": "pending_verification", "record_id": null, "notes": "Pista de descoberta sem exemplar oficial correspondente confirmado nesta revisão."},
+    {"id": "codigo-civil", "label": "Código Civil", "status": "not_located", "record_id": null, "notes": "Nenhum item oficial correspondente foi confirmado nesta revisão delimitada."},
+    {"id": "sociedades-comerciais", "label": "Legislação sobre sociedades comerciais", "status": "not_located", "record_id": null, "notes": "Escopo genérico; nenhum instrumento específico foi confirmado nesta revisão delimitada."},
+    {"id": "codigo-geral-tributario", "label": "Código Geral Tributário", "status": "not_located", "record_id": null, "notes": "Nenhum item oficial correspondente foi confirmado nesta revisão delimitada."},
+    {"id": "administracao-publica", "label": "Legislação da Administração Pública", "status": "not_located", "record_id": null, "notes": "Área ampla, não um diploma único; catálogo temático ainda não levantado."},
+    {"id": "codigo-familia", "label": "Código da Família", "status": "not_located", "record_id": null, "notes": "Nenhum item oficial correspondente foi confirmado nesta revisão delimitada."},
+    {"id": "codigo-processo-penal", "label": "Código de Processo Penal", "status": "not_located", "record_id": null, "notes": "Nenhum item oficial correspondente foi confirmado nesta revisão delimitada."}
+  ]
+}
