@@ -1,0 +1,53 @@
+{
+  "record_id": "al:ao:lei-38-20-2020",
+  "title": "Lei n.º 38/20 — Lei que aprova o Código Penal Angolano",
+  "title_pt": "Lei n.º 38/20 — Lei que aprova o Código Penal Angolano",
+  "title_en": "Law No. 38/20 approving the Angolan Penal Code",
+  "document_nature": "legislation",
+  "document_nature_detail": "Law approving a penal code",
+  "legal_force": "binding",
+  "temporal_status": "amended",
+  "verification_status": "verified",
+  "issuing_authority": "Assembleia Nacional",
+  "territorial_scope": "National — Republic of Angola",
+  "subject_matter": [
+    "criminal law",
+    "penal code"
+  ],
+  "jurisdiction": "AO",
+  "language": [
+    "pt"
+  ],
+  "date_issued": "2020-11-11",
+  "date_published": "2020-11-11",
+  "effective_from": null,
+  "effective_until": null,
+  "official_identifier": "Lei n.º 38/20; Diário da República, I Série, n.º 179, de 11 de Novembro de 2020",
+  "related_identifiers": [
+    {
+      "scheme": "Angola legal instrument",
+      "value": "Lei n.º 12/24, de 4 de Julho de 2024",
+      "relation": "amended_by"
+    }
+  ],
+  "source_url": "https://plataformacipra.gov.ao/public/ficheiros/arquivos/Gov_AngolaLegisla%C3%A7%C3%A3o982801221101131643367673.pdf",
+  "source_name": "Facsimile of Diário da República, I Série n.º 179, linked from the Government of Angola legislation portal",
+  "accessed_at": "2026-11-03",
+  "reuse_rights": {
+    "status": "link_only",
+    "license": null,
+    "evidence": "No explicit redistribution licence was confirmed for the facsimile.",
+    "notes": "This repository stores metadata and a link only; the Gazette text is not reproduced."
+  },
+  "provenance": {
+    "source_description": "The Government of Angola legislation portal links the PDF as “NOVO CÓDIGO PENAL ANGOLANO Lei n.º 38/20 de 11 de Novembro”. The linked facsimile identifies Diário da República, I Série, n.º 179, Wednesday 11 November 2020, and contains Lei n.º 38/20 approving the Penal Code.",
+    "collected_at": "2026-11-03",
+    "method": "Opened the PDF linked from the Government of Angola official legislation page; checked the Gazette masthead, law number/date, title, repeal clause (Article 6) and commencement clause (Article 9).",
+    "contributor": "Angola Legal project"
+  },
+  "summary": "Approves the Angolan Penal Code. The law expressly repeals the 1886 Penal Code and lists other repealed provisions; Article 9 states that the law enters into force 90 days after publication.",
+  "notes": [
+    "The 2024 Lei n.º 12/24 is directly identified in its own Gazette text as an amendment to Lei n.º 38/20; the relationship is recorded in both records.",
+    "The original commencement clause is recorded without calculating a normalized effective date. Current consolidated text and later status beyond the verified amendment have not been exhaustively checked; “amended” is not a certification of present legal effect."
+  ]
+}
