@@ -37,9 +37,9 @@ A taxonomia é aberta: a inclusão não depende de o documento ser uma lei, mas 
 
 ## Repository status | Estado do repositório
 
-This repository contains the initial project specification, architecture, editorial policy, legal taxonomy, data model, JSON Schema, an illustrative sample record, a metadata validator and contribution guidance.
+Version **0.2.0** adds a source-level inventory, registry schema and validator, and guidance for discovery, reliability, collection, provenance, deduplication, versioning, and safeguards. The inventory separates confirmed institutional sources from candidate discovery leads. It contains no legal-document records.
 
-It does **not** claim to contain a complete or verified corpus of Angolan legal materials. The sample record is illustrative, not a real legal instrument.
+The repository does **not** claim a complete or verified corpus of Angolan legal materials. The existing sample is illustrative, not a real legal instrument. Source verification confirms only the portal-level facts and access observation recorded, not every hosted document.
 
 ## Licensing | Licenciamento
 
@@ -48,26 +48,23 @@ It does **not** claim to contain a complete or verified corpus of Angolan legal 
 
 ## Getting started | Primeiros passos
 
-See:
+- `docs/SOURCE-DISCOVERY.md` — verification, reliability, collection workflow and safeguards;
+- `sources/source-registry.json` and `schemas/source-registry.schema.json` — inventory and schema;
+- `docs/SPECIFICATION.md`, `docs/LEGAL-TAXONOMY.md`, `docs/DATA-MODEL.md`;
+- `docs/EDITORIAL-POLICY.md`, `docs/ARCHITECTURE.md`, `CONTRIBUTING.md`, `DATA-LICENSE.md`.
 
-- `docs/SPECIFICATION.md` — initial technical specification;
-- `docs/LEGAL-TAXONOMY.md` — broad legal-material taxonomy;
-- `docs/DATA-MODEL.md` and `schemas/legal-document.schema.json` — record structure;
-- `docs/EDITORIAL-POLICY.md` — verification and editorial rules;
-- `docs/ARCHITECTURE.md` — proposed architecture;
-- `CONTRIBUTING.md` — how to contribute;
-- `DATA-LICENSE.md` — document and dataset rights.
-
-### Validate the illustrative record
+### Validate records and sources
 
 ```bash
 python -m pip install -r requirements-dev.txt
 python scripts/validate_metadata.py records/examples/illustrative-record.json
+python scripts/validate_sources.py
+python -m unittest discover -s tests
 ```
 
 ## Contributing | Contribuir
 
-Contributions are welcome: source discovery, metadata, legal taxonomy, validation, documentation, translations and code. Please read `CONTRIBUTING.md` and the editorial policy before submitting materials.
+Contributions are welcome: source discovery, metadata, legal taxonomy, validation, documentation, translations and code. Please read `CONTRIBUTING.md`, the editorial policy and source discovery guidance before contributing.
 
 ## Disclaimer | Aviso
 
