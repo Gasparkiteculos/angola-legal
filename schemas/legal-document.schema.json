@@ -1,0 +1,289 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Gasparkiteculos/angola-legal/blob/main/schemas/legal-document.schema.json",
+  "title": "Angola Legal document metadata",
+  "description": "Metadata about a legal or legally relevant item. Does not contain or license source text.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_id",
+    "title",
+    "document_nature",
+    "verification_status",
+    "reuse_rights",
+    "provenance"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "pattern": "^al:[a-z0-9][a-z0-9._:-]{2,127}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title_pt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title_en": {
+      "type": "string",
+      "minLength": 1
+    },
+    "document_nature": {
+      "type": "string",
+      "enum": [
+        "constitution",
+        "legislation",
+        "regulation",
+        "administrative_act",
+        "judicial_decision",
+        "international_instrument",
+        "legislative_material",
+        "contract_or_procurement",
+        "collective_agreement",
+        "professional_rule",
+        "doctrine_or_research",
+        "form_or_guidance",
+        "legal_notice",
+        "historical_record",
+        "other"
+      ]
+    },
+    "document_nature_detail": {
+      "type": "string"
+    },
+    "legal_force": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "binding",
+        "non_binding",
+        "persuasive",
+        "informational",
+        "unknown",
+        null
+      ]
+    },
+    "temporal_status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "in_force",
+        "partially_in_force",
+        "amended",
+        "repealed",
+        "expired",
+        "not_yet_in_force",
+        "historical",
+        "not_applicable",
+        "unknown",
+        null
+      ]
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": [
+        "verified",
+        "partially_verified",
+        "unverified",
+        "disputed",
+        "withdrawn"
+      ]
+    },
+    "issuing_authority": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "territorial_scope": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "For example national, provincial, municipal, or cross-border; state unknown when not established."
+    },
+    "subject_matter": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "jurisdiction": {
+      "type": "string",
+      "default": "AO"
+    },
+    "language": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]{2,3}(-[A-Z]{2})?$"
+      },
+      "uniqueItems": true
+    },
+    "date_issued": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "date_published": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "effective_from": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "effective_until": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "official_identifier": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "related_identifiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scheme",
+          "value"
+        ],
+        "properties": {
+          "scheme": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "relation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source_url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "source_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "accessed_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "reuse_rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "project_metadata_cc0",
+            "public_domain_confirmed",
+            "license_granted",
+            "link_only",
+            "restricted",
+            "unknown"
+          ]
+        },
+        "license": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_description"
+      ],
+      "properties": {
+        "source_description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "collected_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "method": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "contributor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "summary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
