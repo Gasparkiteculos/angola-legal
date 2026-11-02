@@ -2,6 +2,13 @@
 
 All notable project changes are recorded here.
 
+## [0.6.0] - 2026-11-03
+
+- Added unit tests for direct/inverse relations, ambiguity, unresolved references, duplicates, invalid labels, self-references and edge provenance.
+- Added a graph integrity report and CI check; relation labels are constrained by schema and invalid/self-referential edges fail validation.
+- Kept ambiguous and unresolved references visible as review warnings rather than dropping them.
+
+
 ## [0.5.0] - 2026-11-03
 
 - Added deterministic JSON and Graphviz DOT output for the legal relationship graph.
