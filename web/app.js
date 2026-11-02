@@ -26,7 +26,7 @@ async function search() {
   for (const [key,value] of Object.entries(values)) if (value) params.set(key,value);
   const data = await api("/api/v1/search?" + params);
   $("count").textContent = "(" + data.total + ")";
-  $("results").innerHTML = data.results.map(item => `<article class="result"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.official_identifier || "")}</p><p class="tags">${escapeHtml(item.verification_status)} · força: ${escapeHtml(item.legal_force)} · vigência: ${escapeHtml(item.temporal_status)}</p><button data-record="${escapeHtml(item.record_id)}">Ver relações</button></article>`).join("") || "<p>Nenhum registro encontrado.</p>";
+  $("results").innerHTML = data.results.map(item => `<article class="result"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.official_identifier || "")}</p><p class="tags">${escapeHtml(item.document_nature)} · ${escapeHtml(item.issuing_authority)} · publicação: ${escapeHtml(item.date_published || "data desconhecida")}</p><p class="tags">${escapeHtml(item.verification_status)} · força: ${escapeHtml(item.legal_force)} · vigência: ${escapeHtml(item.temporal_status)}</p><button data-record="${escapeHtml(item.record_id)}">Ver relações</button></article>`).join("") || "<p>Nenhum registro encontrado.</p>";
   document.querySelectorAll("[data-record]").forEach(button => button.addEventListener("click", () => loadGraph(button.dataset.record)));
 }
 async function loadCoverage() {
