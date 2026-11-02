@@ -21,3 +21,7 @@ Automated metadata checks do not determine legal status. Human review remains ne
 
 ## Legal relationship graph
 Run `python scripts/catalog.py graph --format json` for a machine-readable graph or `python scripts/catalog.py graph --format dot` for Graphviz DOT. Edges retain the record making the assertion, its evidence URL and verification label. Reciprocal `amends`/`amended_by` declarations are normalized and merged without discarding evidence. A reference that does not resolve uniquely to a catalogue record is emitted as an unresolved external node. This is a graph of recorded metadata and evidence, not a legal opinion or an exhaustive statement of the law.
+
+
+## Integrity report
+Run `python scripts/catalog.py check-graph` to review counts, errors and warnings before publishing a graph. Invalid relation labels, self-references, duplicate assertions and missing provenance fail the check; unresolved or ambiguous targets are warnings with explicit nodes. Unit tests for direct/inverse edges, ambiguous/unresolved targets, duplicates, invalid labels, self-references and provenance run through the existing unittest workflow.
