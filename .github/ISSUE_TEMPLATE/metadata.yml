@@ -1,0 +1,33 @@
+name: Metadata proposal or correction
+description: Propose or correct a catalogue record
+title: "[Metadata]: "
+labels: ["metadata"]
+body:
+  - type: input
+    id: record_id
+    attributes:
+      label: Record ID (if existing)
+  - type: input
+    id: source
+    attributes:
+      label: Source URL or citation
+      description: Prefer an authoritative source. Do not upload copyrighted text.
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed metadata or correction
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and uncertainty
+    validations:
+      required: true
+  - type: checkboxes
+    id: rights
+    attributes:
+      label: Rights and privacy
+      options:
+        - label: I have considered reuse rights and personal data.
+          required: true
