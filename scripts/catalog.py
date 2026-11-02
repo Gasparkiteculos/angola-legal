@@ -198,7 +198,7 @@ def check_graph_integrity(records):
         if not evidence:
             errors.append({"code": "missing_provenance", "edge": edge})
         for item in evidence:
-            if item.get("record_id") not in ids or not item.get("url", "").startswith("https://"):
+            if item.get("record_id") not in ids or not str(item.get("url") or "").startswith("https://"):
                 errors.append({"code": "invalid_provenance", "evidence": item})
         provenance_keys = [(item.get("record_id"), item.get("url")) for item in evidence]
         if len(provenance_keys) != len(set(provenance_keys)):
