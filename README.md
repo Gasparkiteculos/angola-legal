@@ -37,7 +37,7 @@ A taxonomia é aberta: a inclusão não depende de o documento ser uma lei, mas 
 
 ## Repository status | Estado do repositório
 
-Version **0.7.0** adds a verified metadata record for Lei n.º 18/21 and links it to the Constitution republication. Similarity matches are review hints only; they never resolve edges. A dated, scoped coverage ledger distinguishes verified, pending and not-located targets. Coverage is not a completeness claim, and current legal status remains separate.
+Version **0.8.0** adds a read-only JSON API and a small browser interface for filtered search, record metadata, graph neighborhoods and scoped catalogue coverage. The API is a separate module from the interface and uses only the Python standard library. Similarity matches remain review hints; the API preserves unresolved references and evidence. This release does not certify current legal status or catalogue completeness.
 
 The repository does **not** claim a complete or current consolidated corpus of Angolan legal materials. Legal-document verification records the evidence checked; temporal status remains separate and may be unknown. The earlier illustrative sample is fictional, not a real legal instrument.
 
@@ -51,7 +51,8 @@ The repository does **not** claim a complete or current consolidated corpus of A
 - `docs/SOURCE-DISCOVERY.md` — verification, reliability, collection workflow and safeguards;
 - `sources/source-registry.json` and `schemas/source-registry.schema.json` — source inventory and schema;
 - `docs/RECORD-CATALOG.md` and `records/angola/` — catalogue, provenance and document records;
-- `coverage/catalogue-coverage.json`, `schemas/catalogue-coverage.schema.json` and `docs/COVERAGE-AND-API-READINESS.md` — scoped coverage and future API/UI data contract;
+- `coverage/catalogue-coverage.json`, `schemas/catalogue-coverage.schema.json` and `docs/COVERAGE-AND-API-READINESS.md` — scoped coverage and API/UI data contract;
+- `scripts/api.py` and `web/` — read-only JSON API and browser search/graph interface;
 - `docs/SEARCH-VERSIONS.md`, `docs/DATA-MODEL.md` and `scripts/catalog.py` — graph, local metadata search, version reporting and snapshot comparison;
 - `docs/SPECIFICATION.md`, `docs/LEGAL-TAXONOMY.md`, `docs/DATA-MODEL.md`;
 - `docs/EDITORIAL-POLICY.md`, `docs/ARCHITECTURE.md`, `CONTRIBUTING.md`, `DATA-LICENSE.md`.
@@ -65,6 +66,8 @@ python scripts/validate_sources.py
 python -m unittest discover -s tests
 python scripts/catalog.py check-graph
 python scripts/catalog.py coverage
+python scripts/api.py
+# open http://127.0.0.1:8000
 ```
 
 ## Contributing | Contribuir
