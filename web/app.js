@@ -18,10 +18,11 @@ async function loadFacets() {
   fillSelect("verification", facets.verification_status);
   fillSelect("temporal", facets.temporal_status);
   fillSelect("institution", facets.issuing_authority);
+  fillSelect("force", facets.legal_force);
 }
 async function search() {
   const params = new URLSearchParams();
-  const values = {q:$("query").value,nature:$("nature").value,verification_status:$("verification").value,temporal_status:$("temporal").value,institution:$("institution").value};
+  const values = {q:$("query").value,nature:$("nature").value,legal_force:$("force").value,verification_status:$("verification").value,temporal_status:$("temporal").value,institution:$("institution").value,subject:$("subject").value,date_from:$("date-from").value,date_to:$("date-to").value};
   for (const [key,value] of Object.entries(values)) if (value) params.set(key,value);
   const data = await api("/api/v1/search?" + params);
   $("count").textContent = "(" + data.total + ")";
