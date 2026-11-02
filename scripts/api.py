@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import mimetypes
-import re
 from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
