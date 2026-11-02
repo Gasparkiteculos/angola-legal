@@ -37,9 +37,9 @@ A taxonomia é aberta: a inclusão não depende de o documento ser uma lei, mas 
 
 ## Repository status | Estado do repositório
 
-Version **0.2.0** adds a source-level inventory, registry schema and validator, and guidance for discovery, reliability, collection, provenance, deduplication, versioning, and safeguards. The inventory separates confirmed institutional sources from candidate discovery leads. It contains no legal-document records.
+Version **0.3.0** adds an initial catalogue of two real Diário da República instruments: Lei n.º 38/20 and its verified amendment, Lei n.º 12/24. The records capture publication metadata, source links, provenance, reuse limits, and their amendment relationship. They contain no copied legal text.
 
-The repository does **not** claim a complete or verified corpus of Angolan legal materials. The existing sample is illustrative, not a real legal instrument. Source verification confirms only the portal-level facts and access observation recorded, not every hosted document.
+The repository does **not** claim a complete or current consolidated corpus of Angolan legal materials. Legal-document verification records the evidence checked; temporal status remains separate and may be unknown. The earlier illustrative sample is fictional, not a real legal instrument.
 
 ## Licensing | Licenciamento
 
@@ -49,7 +49,8 @@ The repository does **not** claim a complete or verified corpus of Angolan legal
 ## Getting started | Primeiros passos
 
 - `docs/SOURCE-DISCOVERY.md` — verification, reliability, collection workflow and safeguards;
-- `sources/source-registry.json` and `schemas/source-registry.schema.json` — inventory and schema;
+- `sources/source-registry.json` and `schemas/source-registry.schema.json` — source inventory and schema;
+- `docs/RECORD-CATALOG.md` and `records/angola/` — initial catalogue, provenance and document records;
 - `docs/SPECIFICATION.md`, `docs/LEGAL-TAXONOMY.md`, `docs/DATA-MODEL.md`;
 - `docs/EDITORIAL-POLICY.md`, `docs/ARCHITECTURE.md`, `CONTRIBUTING.md`, `DATA-LICENSE.md`.
 
@@ -57,7 +58,7 @@ The repository does **not** claim a complete or verified corpus of Angolan legal
 
 ```bash
 python -m pip install -r requirements-dev.txt
-python scripts/validate_metadata.py records/examples/illustrative-record.json
+python scripts/validate_metadata.py records/examples/illustrative-record.json records/angola/lei-38-20-2020.json records/angola/lei-12-24-2024.json
 python scripts/validate_sources.py
 python -m unittest discover -s tests
 ```
