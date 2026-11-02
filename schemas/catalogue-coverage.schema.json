@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Gasparkiteculos/angola-legal/blob/main/schemas/catalogue-coverage.schema.json",
+  "title": "Angola Legal scoped catalogue coverage ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "reviewed_on", "scope_note", "targets"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "reviewed_on": {"type": "string", "format": "date"},
+    "scope_note": {"type": "string", "minLength": 1},
+    "targets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "status", "record_id", "notes"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "label": {"type": "string", "minLength": 1},
+          "status": {"enum": ["verified", "pending_verification", "not_located"]},
+          "record_id": {"type": ["string", "null"]},
+          "notes": {"type": "string"}
+        },
+        "allOf": [
+          {"if": {"properties": {"status": {"const": "verified"}}, "required": ["status"]},
+           "then": {"properties": {"record_id": {"type": "string", "minLength": 1}}}},
+          {"if": {"properties": {"status": {"enum": ["pending_verification", "not_located"]}}, "required": ["status"]},
+           "then": {"properties": {"record_id": {"type": "null"}}}}
+        ]
+      }
+    }
+  }
+}
