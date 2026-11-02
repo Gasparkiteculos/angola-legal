@@ -7,7 +7,6 @@
       "id": "ao-dron",
       "source_name": "Diário da República Online (DRON), I Série",
       "institution": "Government of Angola / DRON portal",
-      "official_url": "https://diariodarepublica.gov.ao/",
       "source_type": "official_gazette",
       "jurisdiction_coverage": "Angola; Diário da República I Série",
       "access_method": "Public web search/filter and view/download PDF; no login stated",
@@ -16,13 +15,13 @@
       "reliability_notes": "Official portal explicitly labels the hosted I Série PDFs as official. Portal states II and III Series remain through Imprensa Nacional channels; verify those separately. Edition coverage observed as partial, so absence is not evidence of non-publication.",
       "reuse_copyright_notes": "Consultation/download availability is not a redistribution licence. Store source link and permitted metadata only; check each document's rights before copying.",
       "verification_status": "confirmed_official",
-      "evidence_url": "https://diariodarepublica.gov.ao/"
+      "evidence_url": "https://diariodarepublica.gov.ao/",
+      "source_url": "https://diariodarepublica.gov.ao/"
     },
     {
       "id": "ao-assembleia",
       "source_name": "Assembleia Nacional — legislação e atividade parlamentar",
       "institution": "Assembleia Nacional de Angola",
-      "official_url": "https://www.parlamento.ao/leis/index.html",
       "source_type": "legislative_institutional_portal",
       "jurisdiction_coverage": "Angola; parliamentary legislation, legislative process and parliamentary records",
       "access_method": "Public HTML pages; linked documents may be PDF",
@@ -31,13 +30,13 @@
       "reliability_notes": "Primary institutional source for parliamentary materials and legislative history. Approval by Parliament does not alone establish promulgation/publication or current force; check gazette.",
       "reuse_copyright_notes": "Link and metadata only unless specific reuse terms authorize copying; PDFs may have rights or privacy restrictions.",
       "verification_status": "confirmed_official",
-      "evidence_url": "https://www.parlamento.ao/"
+      "evidence_url": "https://www.parlamento.ao/",
+      "source_url": "https://www.parlamento.ao/leis/index.html"
     },
     {
       "id": "ao-biblioteca-parlamento",
       "source_name": "Biblioteca Digital da Assembleia Nacional",
       "institution": "Assembleia Nacional de Angola",
-      "official_url": "https://bi-digital.parlamento.ao/home",
       "source_type": "institutional_digital_repository",
       "jurisdiction_coverage": "Angola; parliamentary and institutional documents and research",
       "access_method": "Public repository web interface; individual access conditions may vary",
@@ -46,13 +45,13 @@
       "reliability_notes": "Official institutional repository for hosted material; distinguish parliamentary records from enacted law and verify law against Diário da República.",
       "reuse_copyright_notes": "Repository access does not establish open licence for documents. Link/metadata only absent explicit reuse terms.",
       "verification_status": "confirmed_official",
-      "evidence_url": "https://bi-digital.parlamento.ao/home"
+      "evidence_url": "https://bi-digital.parlamento.ao/home",
+      "source_url": "https://bi-digital.parlamento.ao/home"
     },
     {
       "id": "ao-tc",
       "source_name": "Tribunal Constitucional — acórdãos",
       "institution": "Tribunal Constitucional de Angola",
-      "official_url": "https://www.tribunalconstitucional.ao/pt/jurisprudencia/acordaos/",
       "source_type": "constitutional_court_jurisprudence",
       "jurisdiction_coverage": "Angola; constitutional jurisdiction",
       "access_method": "Public HTML jurisprudence pages and linked documents",
@@ -61,13 +60,13 @@
       "reliability_notes": "Official court portal; check each decision's metadata and any anonymization/context before cataloguing. Published decisions are not legislation.",
       "reuse_copyright_notes": "Do not assume website publication permits redistribution; retain citations/links and assess personal data and document terms.",
       "verification_status": "confirmed_official",
-      "evidence_url": "https://www.tribunalconstitucional.ao/pt/tribunal/apresentacao/"
+      "evidence_url": "https://www.tribunalconstitucional.ao/pt/tribunal/apresentacao/",
+      "source_url": "https://www.tribunalconstitucional.ao/pt/jurisprudencia/acordaos/"
     },
     {
       "id": "ao-ts",
       "source_name": "Tribunal Supremo — jurisprudência",
       "institution": "Tribunal Supremo de Angola",
-      "official_url": "https://tribunalsupremo.ao/jurisprudencia/",
       "source_type": "supreme_court_jurisprudence",
       "jurisdiction_coverage": "Angola; Supreme Court jurisprudence",
       "access_method": "Public HTML categories and linked decision files (including PDFs)",
@@ -76,13 +75,13 @@
       "reliability_notes": "Official court domain presents jurisprudence. Coverage and completeness are not established; decision dates and current legal significance require per-item verification.",
       "reuse_copyright_notes": "Link/metadata only unless reuse terms permit copies; review privacy and personal data in decisions.",
       "verification_status": "confirmed_official",
-      "evidence_url": "https://tribunalsupremo.ao/"
+      "evidence_url": "https://tribunalsupremo.ao/",
+      "source_url": "https://tribunalsupremo.ao/jurisprudencia/"
     },
     {
       "id": "ao-governo",
       "source_name": "Portal Oficial do Governo de Angola — documentos/legislação",
       "institution": "Government of Angola",
-      "official_url": "https://governo.gov.ao/",
       "source_type": "executive_institutional_portal",
       "jurisdiction_coverage": "Angola; executive documents and legislative materials linked by government",
       "access_method": "Public web pages; documents section offers legislation and document categories",
@@ -91,13 +90,13 @@
       "reliability_notes": "Official executive source for items it publishes; use Diário da República to verify authoritative promulgated text and publication status.",
       "reuse_copyright_notes": "Public display does not grant republication rights. Preserve source links; copy only with permission or clear licence.",
       "verification_status": "confirmed_official",
-      "evidence_url": "https://governo.gov.ao/"
+      "evidence_url": "https://governo.gov.ao/",
+      "source_url": "https://governo.gov.ao/"
     },
     {
       "id": "ao-minfin",
       "source_name": "Ministério das Finanças — Portal de Legislação",
       "institution": "Ministério das Finanças de Angola",
-      "official_url": "https://www.minfin.gov.ao/legislacoes",
       "source_type": "ministry_legislation_portal",
       "jurisdiction_coverage": "Angola; finance, tax, budget, public finance and ministry materials",
       "access_method": "Public web portal; page lists legislation",
@@ -106,13 +105,13 @@
       "reliability_notes": "Official ministry portal, but page access/rendering should be rechecked by collector. Ministry listing is a discovery aid; validate enactment and version in gazette.",
       "reuse_copyright_notes": "No reuse permission inferred; link/metadata only pending item-level terms.",
       "verification_status": "confirmed_official",
-      "evidence_url": "https://www.minfin.gov.ao/"
+      "evidence_url": "https://www.minfin.gov.ao/",
+      "source_url": "https://www.minfin.gov.ao/legislacoes"
     },
     {
       "id": "ao-maptss",
       "source_name": "MAPTSS — Legislações",
       "institution": "Ministério da Administração Pública, Trabalho e Segurança Social",
-      "official_url": "https://dashboard.maptss.gov.ao/legislacao/",
       "source_type": "ministry_legislation_portal",
       "jurisdiction_coverage": "Angola; public administration, labour and social security",
       "access_method": "Public HTML legislation listing",
@@ -121,13 +120,13 @@
       "reliability_notes": "Official ministry source for sectoral materials it publishes; verify the legal instrument in the official gazette and assess historical coverage.",
       "reuse_copyright_notes": "No redistribution licence inferred; record links and metadata only pending item-specific rights review.",
       "verification_status": "confirmed_official",
-      "evidence_url": "https://dashboard.maptss.gov.ao/legislacao/"
+      "evidence_url": "https://dashboard.maptss.gov.ao/legislacao/",
+      "source_url": "https://dashboard.maptss.gov.ao/legislacao/"
     },
     {
       "id": "un-treaties",
       "source_name": "United Nations Treaty Collection",
       "institution": "United Nations, Office of Legal Affairs, Treaty Section",
-      "official_url": "https://treaties.un.org/",
       "source_type": "international_treaty_depositary_database",
       "jurisdiction_coverage": "Treaties deposited with or registered by the UN; use Angola country/status filters where available",
       "access_method": "Public searchable web database, treaty texts and status/depositary records",
@@ -136,13 +135,13 @@
       "reliability_notes": "Authoritative for its depositary/registration records, not a complete record of every treaty binding Angola. Confirm Angolan consent/status and domestic publication separately.",
       "reuse_copyright_notes": "UN terms apply; do not mirror treaty PDFs without checking terms. Store citation and status metadata.",
       "verification_status": "confirmed_official",
-      "evidence_url": "https://treaties.un.org/pages/Home.aspx?lang=en"
+      "evidence_url": "https://treaties.un.org/pages/Home.aspx?lang=en",
+      "source_url": "https://treaties.un.org/"
     },
     {
       "id": "au-treaties",
       "source_name": "African Union Treaties, Conventions, Protocols & Charters",
       "institution": "African Union Commission",
-      "official_url": "https://au.int/en/treaties",
       "source_type": "regional_treaty_status_database",
       "jurisdiction_coverage": "OAU/AU treaty texts and member-state signature/ratification status, including Angola where listed",
       "access_method": "Public web catalogue with treaty pages and status lists",
@@ -151,13 +150,13 @@
       "reliability_notes": "Official AU repository for AU treaty records. Confirm exact Angola status and domestic incorporation/publication with primary Angolan sources.",
       "reuse_copyright_notes": "No blanket reuse permission inferred; metadata/link first and check individual terms.",
       "verification_status": "confirmed_official",
-      "evidence_url": "https://au.int/en/treaties"
+      "evidence_url": "https://au.int/en/treaties",
+      "source_url": "https://au.int/en/treaties"
     },
     {
       "id": "candidate-angolex",
       "source_name": "Angolex — legal search/discovery index",
       "institution": "Private/non-governmental website (institutional ownership not verified)",
-      "official_url": "https://www.angolex.com/",
       "source_type": "candidate_discovery_index",
       "jurisdiction_coverage": "Angolan legal materials indexed by the site; coverage and completeness unknown",
       "access_method": "Public web search/index pages",
@@ -166,7 +165,8 @@
       "reliability_notes": "Discovery lead only; never cite as proof of publication, authenticity, date, force, or current status without primary-source corroboration.",
       "reuse_copyright_notes": "Third-party terms/copyright apply; do not scrape or redistribute texts; use only to locate primary sources.",
       "verification_status": "candidate_discovery_only",
-      "evidence_url": "https://www.angolex.com/"
+      "evidence_url": "https://www.angolex.com/",
+      "source_url": "https://www.angolex.com/"
     }
   ]
 }
