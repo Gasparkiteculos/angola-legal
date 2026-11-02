@@ -2,6 +2,15 @@
 
 All notable project changes are recorded here.
 
+## [0.7.0] - 2026-11-03
+
+- Added verified metadata for Lei n.º 18/21 from an official Assembleia Nacional publication and linked its amendment/republication relationship to the Constitution republication record.
+- Recorded the source's express restriction on reproduction; no legal text or PDF is redistributed.
+- Added suggestion-only similarity hints that cannot resolve graph references or create confirmed edges.
+- Added a scoped catalogue coverage ledger, JSON Schema, validation report, API/UI-ready JSON guidance, and CI checks.
+- Distinguished verified, pending-verification, and not-located targets; coverage is explicitly non-exhaustive and temporal legal status remains independent.
+
+
 ## [0.6.0] - 2026-11-03
 
 - Added unit tests for direct/inverse relations, ambiguity, unresolved references, duplicates, invalid labels, self-references and edge provenance.
