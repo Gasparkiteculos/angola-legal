@@ -178,7 +178,8 @@
             "type": "string"
           },
           "relation": {
-            "type": "string"
+            "type": "string",
+            "description": "Relation from this record to the referenced instrument. Known terms: amends, amended_by, repeals, repealed_by, regulates, implements, implemented_by, complements, complemented_by, consolidates, consolidated_by, revises, revised_by, republication_under, version_of, related_to. Graph generation canonicalizes inverse pairs where defined; unknown terms are preserved."
           }
         }
       }
