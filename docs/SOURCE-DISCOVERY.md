@@ -13,7 +13,7 @@ The registry at `sources/source-registry.json` inventories portals, not legal do
 5. Seed only source-level facts that were observed. Never infer document names, dates, enactment, publication, legal force, or current status from search snippets or third-party mirrors.
 6. Recheck sources periodically and after redirects, host changes, prolonged outages, or conflicting records. Preserve prior observations in version history rather than silently rewriting history.
 
-The initial inventory was checked on 2026-11-03. Search engines aided discovery; cited evidence URLs point to the institution or repository page where possible.
+The initial inventory was checked on 2026-11-03. Search engines aided discovery; cited evidence URLs point to the institution or repository page where possible. The DRON portal says II and III Series remain available through Imprensa Nacional channels, but the specific publisher portal timed out during checking. No unverified Imprensa Nacional URL is seeded; that access route remains an open discovery task. The Angolex entry is a third-party lead only, not an authoritative source.
 
 ## Reliability tiers | Níveis de fiabilidade
 
