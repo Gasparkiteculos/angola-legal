@@ -34,3 +34,7 @@ Optional fields include issuer, territorial scope, subject matter, language, dat
 ## Legal relationship graph
 
 `python scripts/catalog.py graph --format json` builds a deterministic graph from `related_identifiers` and any explicit `versioning.version_of` links. Use `--format dot` to produce Graphviz DOT. Edges carry the asserting record, source URL and verification label. Inverse pairs such as `amended_by`/`amends` are normalized to a consistent action direction and duplicate reciprocal assertions are combined while retaining both evidence references. Ambiguous or unrepresented targets appear as dashed/external nodes with `resolved: false`; they are not silently discarded or treated as verified documents. The graph represents catalogued assertions and coverage only; it does not infer legal effects, validity or current force.
+
+
+## Integrity report
+`python scripts/catalog.py check-graph` returns a machine-readable report and exits unsuccessfully for invalid relation terms, empty or duplicate assertions, self-references, broken endpoints, or missing/invalid edge provenance. Ambiguous and unresolved references are reported as warnings and remain explicit external nodes so gaps are visible. Reciprocal assertions from different records are allowed and merged with their separate provenance. The relation vocabulary is constrained by the document schema.
