@@ -52,10 +52,14 @@ def _index_records(records):
         values = (rid, record.get("title"), record.get("title_pt"),
                   record.get("title_en"), record.get("official_identifier"))
         for value in values:
-            if not value:
-                continue
-            aliases.setdefault(normalize(value), set()).add(rid)
-            for match in INSTRUMENT_PATTERN.finditer(value):
+            if value:
+                aliases.setdefault(normalize(value), set()).add(rid)
+        # Index only the first formal instrument identifier from the record's
+        # own citation. Later identifiers may be cited amendments or parents.
+        if record.get("document_nature") != "constitution":
+            citation = record.get("official_identifier") or record.get("title_pt") or record.get("title")
+            match = INSTRUMENT_PATTERN.search(citation or "")
+            if match:
                 aliases.setdefault(normalize(match.group(0)), set()).add(rid)
     return aliases
 
