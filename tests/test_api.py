@@ -47,6 +47,13 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(400, status)
         self.assertIn("error", body)
 
+    def test_search_rejects_out_of_range_pagination_and_invalid_dates(self):
+        for query in ("/api/v1/search?limit=0", "/api/v1/search?offset=-1",
+                      "/api/v1/search?date_from=not-a-date"):
+            status, _, body = api.dispatch(query, records=self.records, coverage={"targets": []})
+            self.assertEqual(400, status, query)
+            self.assertIn("error", body)
+
     def test_document_endpoint_and_unknown_document(self):
         status, _, body = api.dispatch("/api/v1/documents/al:ao:one",
                                        records=self.records, coverage={"targets": []})
