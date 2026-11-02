@@ -95,5 +95,35 @@ class RelationshipGraphTests(unittest.TestCase):
         report = catalog.check_graph_integrity([item])
         self.assertIn("invalid_provenance", {issue["code"] for issue in report["errors"]})
 
+    def test_similarity_suggestion_never_resolves_or_confirms_edge(self):
+        known = record("al:ao:law-18", "Lei n.º 18/21, de 16 de Agosto")
+        citing = record("al:ao:citing", "Constituição", [{
+            "scheme": "law", "value": "Lei n.º 18/21 de 16 Agosto", "relation": "amends"
+        }])
+        graph = catalog.build_relationship_graph([known, citing])
+        external = next(node for node in graph["nodes"] if not node["resolved"])
+        self.assertEqual("unresolved_reference", external["verification_status"])
+        self.assertTrue(external["suggested_matches"])
+        self.assertEqual("al:ao:law-18", external["suggested_matches"][0]["record_id"])
+        edge = next(edge for edge in graph["edges"] if edge["evidence"][0]["record_id"] == "al:ao:citing")
+        self.assertEqual(external["id"], edge["target"])
+        self.assertIn("suggestion-only", external["suggested_matches"][0]["method"])
+
+    def test_coverage_report_requires_verified_record_and_null_for_other_states(self):
+        ledger = {"reviewed_on": "2026-11-03", "scope_note": "bounded", "targets": [
+            {"id": "present", "status": "verified", "record_id": "al:ao:law"},
+            {"id": "pending", "status": "pending_verification", "record_id": None},
+            {"id": "missing", "status": "not_located", "record_id": None},
+        ]}
+        records = [record("al:ao:law", "Lei n.º 1/20")]
+        report = catalog.catalogue_coverage(ledger, records)
+        self.assertEqual("pass", report["status"])
+        self.assertEqual(1, report["target_counts"]["pending_verification"])
+        ledger["targets"][0]["record_id"] = "al:ao:unknown"
+        ledger["targets"][1]["record_id"] = "al:ao:law"
+        report = catalog.catalogue_coverage(ledger, records)
+        self.assertEqual("invalid", report["status"])
+        self.assertEqual(1, len(report["errors"]))
+
 if __name__ == "__main__":
     unittest.main()
