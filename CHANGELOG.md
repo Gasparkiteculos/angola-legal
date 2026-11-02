@@ -2,6 +2,13 @@
 
 All notable project changes are recorded here.
 
+## [0.5.0] - 2026-11-03
+
+- Added deterministic JSON and Graphviz DOT output for the legal relationship graph.
+- Normalized inverse legal relations, retained assertion provenance and represented unresolved references explicitly.
+- Documented graph interpretation and limits; the graph does not infer legal force, validity or completeness.
+
+
 ## [0.4.0] - 2026-11-03
 
 - Added verified metadata records for the Constitution republication identified by the National Assembly digital library and Lei n.º 12/23 from the MAPTSS LGT portal.
