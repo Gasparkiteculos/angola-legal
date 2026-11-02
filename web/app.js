@@ -40,7 +40,16 @@ async function loadGraph(recordId) {
     const from = data.nodes.find(node => node.id === edge.source);
     const to = data.nodes.find(node => node.id === edge.target);
     const evidence = edge.evidence.map(item => item.url ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener">evidência</a>` : "sem URL").join(", ");
-    return `<article class="edge"><strong>${escapeHtml(from?.title || edge.source)}</strong><span>→ ${escapeHtml(edge.relation)} →</span><strong>${escapeHtml(to?.title || edge.target)}</strong><p>${evidence} · ${escapeHtml(edge.evidence.map(item => item.verification_status).join(", "))}</p></article>`;
+    const endpoint = node => {
+      if (!node) return "";
+      if (node.resolved) return "";
+      const suggestions = (node.suggested_matches || []).map(match => {
+        const candidate = data.nodes.find(item => item.id === match.record_id);
+        return `<li>${escapeHtml(candidate?.title || match.record_id)} — sugestão (${escapeHtml(match.similarity)})</li>`;
+      }).join("");
+      return `<p class="warning">Referência não resolvida; sugestão não confirmada.${suggestions ? `<ul>${suggestions}</ul>` : ""}</p>`;
+    };
+    return `<article class="edge"><strong>${escapeHtml(from?.title || edge.source)}</strong>${endpoint(from)}<span>→ ${escapeHtml(edge.relation)} →</span><strong>${escapeHtml(to?.title || edge.target)}</strong>${endpoint(to)}<p>${evidence} · ${escapeHtml(edge.evidence.map(item => item.verification_status).join(", "))}</p></article>`;
   }).join("") || "<p>Sem relações registadas para este documento.</p>";
 }
 $("search-form").addEventListener("submit", event => {event.preventDefault(); search().catch(showError);});
