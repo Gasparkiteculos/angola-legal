@@ -22,3 +22,10 @@ Publication and legal force are separate from present-day temporal status. Lei n
 ## Rights
 
 The source facsimiles remain with their host institutions. The repository stores no facsimile, OCR or full legal text. Each record is marked `link_only` because no explicit redistribution licence was established for the source copy.
+
+
+## v0.4.0 expansion
+
+The catalogue now includes the Assembleia Nacional digital-library republication of the Constitution and Lei n.º 12/23, the General Labour Law, from the MAPTSS LGT portal. The Constitution item identifies a republication under Lei n.º 18/21; its item-specific reuse licence was not inspected. The labour record reflects the Gazette masthead (I Série, n.º 245, 27 December 2023); commencement and subsequent change chain remain unaudited.
+
+Civil, commercial, tax, administrative, family and procedural areas remain open until an official source and document metadata can be verified.
