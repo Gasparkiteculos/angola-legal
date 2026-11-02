@@ -2,6 +2,12 @@
 
 All notable project changes are recorded here.
 
+## [0.3.0] - 2026-11-03
+
+- Added verified metadata records for Lei n.º 38/20 and its amending Lei n.º 12/24, with source links and a bidirectional amendment relationship.
+- Recorded gazette series/issue, dates, issuer, evidence, provenance and reuse restrictions; separated verified publication from current temporal status.
+- Added an initial catalogue note. No Gazette text or PDF was copied into the repository.
+
 ## [0.2.0] - 2026-11-03
 
 - Added source-level inventory separating confirmed official portals and discovery candidates.
