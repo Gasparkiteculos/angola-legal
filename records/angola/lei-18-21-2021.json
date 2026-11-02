@@ -10,9 +10,13 @@
   "verification_status": "verified",
   "issuing_authority": "Assembleia Nacional",
   "territorial_scope": "National — Republic of Angola",
-  "subject_matter": ["constitutional law"],
+  "subject_matter": [
+    "constitutional law"
+  ],
   "jurisdiction": "AO",
-  "language": ["pt"],
+  "language": [
+    "pt"
+  ],
   "date_issued": "2021-08-16",
   "date_published": "2021-08-16",
   "effective_from": null,
@@ -53,7 +57,7 @@
   "versioning": {
     "version_label": "official-gazette-publication",
     "version_of": null,
-    "version_type": "original",
+    "version_type": "amendment",
     "evidence_url": "https://portaladmin.parlamento.ao/storage/dropzone/image/2023_08_01/20230801_134612_CONSTITUI%C3%87%C3%83O%20DA%20REP%C3%9ABLICA%20DE%20ANGOLA%202010%20%28Rep%C3%BAblica%C3%A7%C3%A3o%29.pdf",
     "change_status": "not_monitored",
     "last_checked": "2026-11-03",
