@@ -1,0 +1,99 @@
+"""Unit tests for legal relationship graph construction and integrity checks."""
+import copy
+import json
+import sys
+import unittest
+from pathlib import Path
+
+from jsonschema import Draft202012Validator
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+import catalog
+
+def record(record_id, identifier, relations=None, source_url=None):
+    return {
+        "record_id": record_id,
+        "title": identifier,
+        "official_identifier": identifier,
+        "related_identifiers": relations or [],
+        "verification_status": "verified",
+        "temporal_status": "unknown",
+        "source_url": source_url or f"https://official.example/{record_id}",
+    }
+
+class RelationshipGraphTests(unittest.TestCase):
+    def test_direct_and_inverse_relations_merge_and_keep_provenance(self):
+        old = record("al:ao:old", "Lei n.º 38/20", [{
+            "scheme": "law", "value": "Lei n.º 12/24", "relation": "amended_by"
+        }])
+        new = record("al:ao:new", "Lei n.º 12/24", [{
+            "scheme": "law", "value": "Lei n.º 38/20", "relation": "amends"
+        }])
+        graph = catalog.build_relationship_graph([old, new])
+        self.assertEqual(1, len(graph["edges"]))
+        edge = graph["edges"][0]
+        self.assertEqual(("al:ao:new", "al:ao:old", "amends"),
+                         (edge["source"], edge["target"], edge["relation"]))
+        self.assertEqual(
+            {("al:ao:old", old["source_url"]), ("al:ao:new", new["source_url"])},
+            {(item["record_id"], item["url"]) for item in edge["evidence"]},
+        )
+        report = catalog.check_graph_integrity([old, new])
+        self.assertEqual("pass", report["status"])
+
+    def test_ambiguous_reference_is_explicit_and_reported(self):
+        first = record("al:ao:first", "Lei n.º 2/20")
+        second = record("al:ao:second", "Lei n.º 2/20")
+        citing = record("al:ao:citing", "Lei n.º 3/20", [{
+            "scheme": "law", "value": "Lei n.º 2/20", "relation": "amends"
+        }])
+        graph = catalog.build_relationship_graph([first, second, citing])
+        node = next(n for n in graph["nodes"]
+                    if n["verification_status"] == "ambiguous_reference")
+        self.assertFalse(node["resolved"])
+        report = catalog.check_graph_integrity([first, second, citing])
+        self.assertIn("ambiguous_reference", {item["code"] for item in report["warnings"]})
+
+    def test_unresolved_reference_is_preserved_as_external_node(self):
+        citing = record("al:ao:citing", "Lei n.º 3/20", [{
+            "scheme": "law", "value": "Lei n.º 99/99", "relation": "regulates"
+        }])
+        graph = catalog.build_relationship_graph([citing])
+        external = [n for n in graph["nodes"] if not n["resolved"]]
+        self.assertEqual(1, len(external))
+        self.assertEqual("unresolved_reference", external[0]["verification_status"])
+        report = catalog.check_graph_integrity([citing])
+        self.assertEqual("pass", report["status"])
+        self.assertEqual(1, report["unresolved_reference_count"])
+
+    def test_invalid_relation_self_reference_and_duplicate_are_errors(self):
+        item = record("al:ao:self", "Lei n.º 4/20", [
+            {"scheme": "record_id", "value": "al:ao:self", "relation": "amends"},
+            {"scheme": "record_id", "value": "al:ao:self", "relation": "amends"},
+            {"scheme": "law", "value": "Lei n.º 9/20", "relation": "invented"},
+        ])
+        report = catalog.check_graph_integrity([item])
+        codes = {issue["code"] for issue in report["errors"]}
+        self.assertTrue({"invalid_relation", "self_reference", "duplicate_assertion"} <= codes)
+        self.assertEqual("invalid", report["status"])
+
+    def test_schema_rejects_unknown_relation_term(self):
+        schema = json.loads((ROOT / "schemas/legal-document.schema.json").read_text(encoding="utf-8"))
+        source = json.loads((ROOT / "records/angola/lei-12-24-2024.json").read_text(encoding="utf-8"))
+        invalid = copy.deepcopy(source)
+        invalid["related_identifiers"][0]["relation"] = "invented"
+        validator = Draft202012Validator(schema)
+        self.assertTrue(list(validator.iter_errors(invalid)))
+
+    def test_integrity_report_detects_missing_edge_provenance(self):
+        item = record("al:ao:unproven", "Lei n.º 5/20", [{
+            "scheme": "law", "value": "Lei n.º 6/20", "relation": "amends"
+        }], source_url=None)
+        # Force a missing link: the graph must report that the edge has no usable provenance URL.
+        item["source_url"] = None
+        report = catalog.check_graph_integrity([item])
+        self.assertIn("invalid_provenance", {issue["code"] for issue in report["errors"]})
+
+if __name__ == "__main__":
+    unittest.main()
