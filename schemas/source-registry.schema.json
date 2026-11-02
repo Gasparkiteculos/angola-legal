@@ -39,7 +39,7 @@
         "id",
         "source_name",
         "institution",
-        "official_url",
+        "source_url",
         "source_type",
         "jurisdiction_coverage",
         "access_method",
@@ -63,7 +63,7 @@
           "type": "string",
           "minLength": 1
         },
-        "official_url": {
+        "source_url": {
           "type": "string",
           "format": "uri"
         },
