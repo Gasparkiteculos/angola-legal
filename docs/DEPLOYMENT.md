@@ -2,7 +2,7 @@
 
 ## Current status
 
-The repository contains a production profile for one Linux VPS using Docker Compose, a private Waitress service and Caddy for HTTPS. No provider account, domain, DNS, TLS endpoint, monitoring vendor or public deployment is configured. The value `legal.example.org` in `.env.example` is a placeholder and must be replaced with a domain the project owner controls.
+The repository contains a production profile for one Linux VPS using Docker Compose, a private Waitress service and Caddy for HTTPS. No provider account, domain, DNS, TLS endpoint, monitoring vendor or public deployment is configured. The `.invalid` values in `.env.example` are reserved placeholders and must be replaced with a domain the project owner controls.
 
 See `HOSTING-DECISION.md` for the provider choice and dated price estimate. No paid service or domain was purchased.
 
@@ -11,7 +11,7 @@ See `HOSTING-DECISION.md` for the provider choice and dated price estimate. No p
 - Linux VPS with Docker Engine and the Docker Compose plugin.
 - A domain registered and controlled by the owner.
 - Provider firewall access: allow TCP 80/443 and UDP 443 from the Internet; allow SSH only from an authorized administrator address. Do not open TCP 8000.
-- DNS A record pointing to the VPS public IPv4. Configure AAAA only if IPv6 is actually assigned, routed and tested.
+- DNS A record pointing to the VPS public IPv4. The baseline stack does not publish IPv6 listeners; do not add an AAAA record until explicit IPv6 host bindings and firewall rules have been configured and tested.
 - Git access to the repository and an owner-managed SSH key.
 
 ## First activation
@@ -20,7 +20,7 @@ See `HOSTING-DECISION.md` for the provider choice and dated price estimate. No p
 2. Verify domain ownership and configure DNS to the allocated server IP. Do not assume any particular Angola domain is available.
 3. Clone the reviewed repository branch/commit on the host. Do not deploy an unreviewed branch.
 4. Copy `.env.example` to `.env`, then set `ANGOLA_DOMAIN` and `ANGOLA_PUBLIC_BASE_URL` to the verified hostname and its exact HTTPS origin. The file is Git-ignored; do not commit it. No application secret is required.
-5. Confirm that the private subnet `172.29.0.0/24` does not conflict with an existing Docker network. If it does, change the subnet and both fixed container addresses together, then adjust `ANGOLA_TRUSTED_PROXY` to the exact Caddy address.
+5. Confirm that the private subnet `172.29.0.0/24` does not conflict with an existing Docker network. If it does, change the subnet and both fixed container addresses together, then adjust the trusted proxy address in production Compose to the exact Caddy address.
 6. Check the rendered config and start the stack:
    ```sh
    docker compose --env-file .env -f docker-compose.production.yml config --quiet
