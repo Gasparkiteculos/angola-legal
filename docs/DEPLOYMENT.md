@@ -26,6 +26,10 @@ O container corre como utilizador não privilegiado, sistema de ficheiros de lei
 6. Ajustar threads, limite de ligações e rate limit com base em métricas e limites de file descriptors. O rate limiter é local ao processo; réplicas horizontais precisam de limites partilhados no proxy.
 7. Ativar firewall, atualizações, alertas, backups de configuração e rollback. Verificar HTTPS, redirects, headers, health checks, sitemap, logs e 429 após publicar.
 
+## Nginx validation scope
+
+CI checks the template textually for header replacement, redirect target, and rate-limit status. It does not run `nginx -t`, start Nginx, or test the complete Client → Nginx → Waitress path. The Waitress socket tests exercise Waitress proxy-header handling directly; they are not an Nginx integration test. After adapting the template to a real host, validate the complete Nginx configuration with `nginx -t` when Nginx is available, then verify the live proxy path before exposing the service.
+
 ## Configuration
 
 | Variable | Default | Purpose |

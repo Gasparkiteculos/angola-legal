@@ -10,8 +10,8 @@ All notable project changes are recorded here.
 - Fixed Nginx's HTTP redirect to use the configured server name and return 429 for edge rate limits.
 - Added idle rate-limit bucket expiry, stricter readiness checks and rejection of graph depths outside 0–3.
 - Pinned the sole runtime dependency and documented proxy, readiness, and per-process rate-limit behavior.
+- Added changelog integrity checks and clarified the static-only Nginx validation boundary.
 
-## [0.9.0]
 ## [0.9.0] - 2026-11-03
 
 - Replaced the development HTTP server with a Waitress WSGI server while preserving API v1 and read-only behavior.
