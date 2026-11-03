@@ -3,6 +3,7 @@ import io
 import json
 import sys
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -78,6 +79,25 @@ class ProductionWsgiTests(unittest.TestCase):
         search = request("/api/v1/search?q=Lei")
         self.assertEqual("200 OK", search["status"])
         self.assertGreater(json.loads(search["body"])["total"], 0)
+
+    def test_routes_cover_search_facets_sources_document_graph_and_coverage(self):
+        paths = ["/api/v1/health", "/api/v1/search", "/api/v1/facets",
+                 "/api/v1/sources", "/api/v1/coverage", "/api/v1/graph",
+                 "/api/v1/documents/al:ao:lei-18-21-2021"]
+        for path in paths:
+            response = request(path)
+            self.assertEqual("200 OK", response["status"], path)
+            self.assertTrue(response["body"], path)
+
+    def test_sitemap_is_disabled_without_verified_public_origin_and_built_when_set(self):
+        with patch.dict("os.environ", {"ANGOLA_PUBLIC_BASE_URL": ""}):
+            self.assertEqual("404 Error", request("/sitemap.xml")["status"])
+        with patch.dict("os.environ", {"ANGOLA_PUBLIC_BASE_URL": "https://legal.example"}):
+            sitemap = request("/sitemap.xml")
+            robots = request("/robots.txt")
+        self.assertEqual("200 OK", sitemap["status"])
+        self.assertIn(b"https://legal.example/?record=al%3Aao%3Alei-18-21-2021", sitemap["body"])
+        self.assertIn(b"Sitemap: https://legal.example/sitemap.xml", robots["body"])
 
     def test_limiter_storage_is_bounded(self):
         limiter = production.TokenBucketLimiter(rate=60, capacity=5, max_clients=3)
