@@ -1,33 +1,42 @@
-name: Validate document metadata and source registry
+name: Validate and secure Angola Legal
 
 on:
   push:
     paths:
       - "Dockerfile"
       - "docker-compose.yml"
-      - "requirements.txt"
+      - ".dockerignore"
+      - ".env.example"
       - "deploy/**"
       - "web/**"
+      - "coverage/**"
+      - "docs/**"
       - "schemas/**"
       - "sources/**"
       - "records/**"
       - "scripts/**"
       - "tests/**"
-      - "web/**"
-      - "docs/**"
-      - "requirements-dev.txt"
+      - "requirements*.txt"
       - "VERSION"
       - "README.md"
       - "CHANGELOG.md"
       - ".github/workflows/validate.yml"
   pull_request:
     paths:
+      - "Dockerfile"
+      - "docker-compose.yml"
+      - ".dockerignore"
+      - ".env.example"
+      - "deploy/**"
+      - "web/**"
+      - "coverage/**"
+      - "docs/**"
       - "schemas/**"
       - "sources/**"
       - "records/**"
       - "scripts/**"
       - "tests/**"
-      - "requirements-dev.txt"
+      - "requirements*.txt"
       - "VERSION"
       - "README.md"
       - "CHANGELOG.md"
@@ -52,5 +61,7 @@ jobs:
       - run: python -c "import json; from jsonschema import Draft202012Validator, FormatChecker; schema=json.load(open('schemas/catalogue-coverage.schema.json', encoding='utf-8')); data=json.load(open('coverage/catalogue-coverage.json', encoding='utf-8')); Draft202012Validator.check_schema(schema); Draft202012Validator(schema, format_checker=FormatChecker()).validate(data)"
       - run: python scripts/catalog.py check-graph
       - run: python scripts/catalog.py coverage
-      - run: python -m py_compile scripts/api.py scripts/catalog.py
+      - run: python -m py_compile scripts/api.py scripts/production.py scripts/catalog.py
       - run: node --check web/app.js
+      - run: pip-audit --requirement requirements.txt
+      - run: docker compose config --quiet
