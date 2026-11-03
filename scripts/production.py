@@ -172,7 +172,7 @@ def _route(environ, request_id):
                                or not record.get("record_id")
                                or not record.get("title") for record in records)
                         or not isinstance(coverage, dict)
-                        or not isinstance(coverage.get("target_counts"), dict)
+                        or not isinstance(coverage.get("targets"), list)
                         or not isinstance(sources, dict)
                         or not isinstance(sources.get("sources"), list)):
                     raise ValueError("Core catalogue data has an invalid shape.")
