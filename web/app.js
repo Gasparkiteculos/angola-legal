@@ -83,8 +83,10 @@ function renderPagination(data) {
   $("prev-page").onclick=()=>search(true,Math.max(0,data.offset-data.limit));
   $("next-page").onclick=()=>search(true,data.offset+data.limit);
 }
-function showError(error) {$("results").innerHTML=`<div class="error" role="alert"><strong>Não foi possível concluir a consulta.</strong><p>${escapeHtml(error.message)}</p><button id="retry">Tentar novamente</button></div>
-  $("retry").onclick=()=>search();}
+function showError(error) {
+  $("results").innerHTML=`<div class="error" role="alert"><strong>Não foi possível concluir a consulta.</strong><p>${escapeHtml(error.message)}</p><button id="retry">Tentar novamente</button></div>`;
+  $("retry").onclick=()=>search();
+}
 async function openDocument(id) {
   $("document-view").hidden=false;$("pesquisa").hidden=true;$("grafo").hidden=true;
   $("document-content").innerHTML='<p role="status">A carregar o registro…</p>';
