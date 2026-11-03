@@ -91,7 +91,7 @@ def _route(environ, request_id):
         raise ApiError(405, "This service is read-only.")
     if path == "/robots.txt":
         origin = os.getenv("ANGOLA_PUBLIC_BASE_URL", "").rstrip("/")
-        text = "User-agent: *\\nAllow: /\\n" + (f"Sitemap: {origin}/sitemap.xml\\n" if origin.startswith("https://") else "")
+        text = "User-agent: *\nAllow: /\n" + (f"Sitemap: {origin}/sitemap.xml\n" if origin.startswith("https://") else "")
         return 200, text.encode("utf-8"), "text/plain; charset=utf-8", "public, max-age=300"
     if path == "/sitemap.xml":
         origin = os.getenv("ANGOLA_PUBLIC_BASE_URL", "").rstrip("/")
@@ -100,7 +100,7 @@ def _route(environ, request_id):
             raise ApiError(404, "Resource not found.")
         from api import load_records
         urls = [origin + "/", *[origin + "/?record=" + quote(r["record_id"], safe="") for r in load_records()]]
-        xml = '<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{html.escape(u)}</loc></url>" for u in urls) + "</urlset>"
+        xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{html.escape(u)}</loc></url>" for u in urls) + "</urlset>"
         return 200, xml.encode("utf-8"), "application/xml; charset=utf-8", "public, max-age=300"
     if path in ("/", "/app.js", "/styles.css"):
         file_name = {"/": "index.html", "/app.js": "app.js", "/styles.css": "styles.css"}[path]
