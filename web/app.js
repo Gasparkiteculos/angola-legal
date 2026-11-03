@@ -25,8 +25,9 @@ async function init() {
   renderCategories(facets.facets.subject_matter);
   renderSources(sources.sources);
   restoreUrlState();
-  await search();
-  window.addEventListener("popstate", () => { restoreUrlState(); search(false); });
+  const initialRecord = new URLSearchParams(location.search).get("record");
+  if (initialRecord) await openDocument(initialRecord); else await search(false);
+  window.addEventListener("popstate", () => { const record = new URLSearchParams(location.search).get("record"); if (record) openDocument(record); else { $("document-view").hidden=true; $("pesquisa").hidden=false; $("grafo").hidden=true; restoreUrlState(); search(false); } });
 }
 function renderStats(total, coverage, graph, sourceCount) {
   const counts=coverage.target_counts;
