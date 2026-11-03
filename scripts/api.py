@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""Read-only JSON API and small browser UI for Angola Legal metadata."""
+"""Read-only JSON API route logic for Angola Legal metadata."""
 from __future__ import annotations
 
 import json
-import mimetypes
-from datetime import date
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from datetime import date
 from urllib.parse import parse_qs, unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,6 +20,13 @@ def load_records():
 
 def load_coverage():
     return json.loads((ROOT / "coverage" / "catalogue-coverage.json").read_text(encoding="utf-8"))
+
+
+def load_sources():
+    registry = json.loads((ROOT / "sources" / "source-registry.json").read_text(encoding="utf-8"))
+    fields = ("id", "source_name", "institution", "source_url", "source_type",
+              "jurisdiction_coverage", "verification_status")
+    return {"sources": [{key: source.get(key) for key in fields} for source in registry["sources"]]}
 
 
 def _text(value):
@@ -131,6 +136,8 @@ def dispatch(path, records=None, coverage=None):
             return 200, "application/json; charset=utf-8", search_documents(records, params)
         except ValueError as exc:
             return 400, "application/json; charset=utf-8", {"error": str(exc)}
+    if route == API_PREFIX + "/sources":
+        return 200, "application/json; charset=utf-8", load_sources()
     if route == API_PREFIX + "/facets":
         return 200, "application/json; charset=utf-8", document_facets(records)
     if route == API_PREFIX + "/coverage":
@@ -157,53 +164,9 @@ def dispatch(path, records=None, coverage=None):
     return 404, "application/json; charset=utf-8", {"error": "route not found"}
 
 
-class Handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == "/" or self.path in ("/app.js", "/styles.css"):
-            name = "index.html" if self.path == "/" else self.path.lstrip("/")
-            file_path = WEB / name
-            if not file_path.is_file():
-                self.send_error(404)
-                return
-            content = file_path.read_bytes()
-            mime = mimetypes.guess_type(name)[0] or "application/octet-stream"
-            self.send_response(200)
-            self.send_header("Content-Type", mime + ("; charset=utf-8" if mime.startswith(("text/", "application/javascript")) else ""))
-            self.send_header("Content-Length", str(len(content)))
-            self.send_header("X-Content-Type-Options", "nosniff")
-            self.end_headers()
-            self.wfile.write(content)
-            return
-        status, content_type, body = dispatch(self.path)
-        content = json.dumps(body, ensure_ascii=False, indent=2).encode("utf-8")
-        self.send_response(status)
-        self.send_header("Content-Type", content_type)
-        self.send_header("Content-Length", str(len(content)))
-        self.send_header("X-Content-Type-Options", "nosniff")
-        self.end_headers()
-        self.wfile.write(content)
-
-    def do_POST(self):
-        self.send_error(405, "Read-only API")
-
-    def log_message(self, fmt, *args):
-        print("%s - %s" % (self.address_string(), fmt % args))
-
-
 def main():
-    import argparse
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--host", default="127.0.0.1", help="bind address (default: localhost)")
-    parser.add_argument("--port", type=int, default=8000)
-    args = parser.parse_args()
-    server = ThreadingHTTPServer((args.host, args.port), Handler)
-    print(f"Angola Legal API listening at http://{args.host}:{args.port} (read-only)")
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        server.server_close()
+    from production import main as serve
+    serve()
 
 
 if __name__ == "__main__":

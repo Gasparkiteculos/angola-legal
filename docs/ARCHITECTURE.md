@@ -1,32 +1,36 @@
-# Architecture
+# Architecture | Arquitetura
 
-## Initial model
+## Components
 
-The initial repository is a version-controlled specification and metadata catalogue. JSON records follow `schemas/legal-document.schema.json`; validation is performed locally and in GitHub Actions. Source documents are not required in the repository: records may point to an authoritative location.
+1. **Source inventory and discovery:** institutional sources are distinguished from discovery candidates.
+2. **JSON metadata catalogue:** version-controlled records retain identifiers, rights, dates, verification and provenance.
+3. **Validation:** JSON Schemas, Python validators, graph checks and CI guard changes.
+4. **Read-only API v1:** pure route/query logic in `scripts/api.py`; WSGI middleware and operational controls in `scripts/production.py`.
+5. **WSGI server:** Waitress supplies bounded worker and connection handling; the app remains framework-free.
+6. **Browser client:** static HTML/CSS/JavaScript consumes the same-origin API. It is replaceable without changing the API data contract.
+7. **Reverse proxy:** TLS termination, edge rate limits, domain routing and deployment-specific access controls belong to a separately managed proxy/load balancer.
 
-## Logical components
+## Rationale
 
-1. **Discovery:** identify candidate material and record source provenance.
-2. **Metadata:** describe nature, identifiers, dates, subject, authority, territorial scope, status, and relationships.
-3. **Verification:** preserve the assertion, evidence, reviewer state, and time of review.
-4. **Rights and privacy review:** determine what metadata, link, or document content may be published.
-5. **Presentation and search (future):** expose records with filters and clear uncertainty indicators.
+Waitress is a maintained, pure-Python, production-quality WSGI server with Windows support and configurable worker threads, connection limits, channel timeout, header/body size limits and trusted-proxy controls. It is smaller than adding a web framework plus a server. The project uses a WSGI callable directly, so the public API contract remains independent from the browser interface. Current project documentation and package advisories are reviewed during dependency updates. Waitress 3.0.2 is the minimum selected release; it supports Python 3.9 and later. See the [official Waitress documentation](https://docs.pylonsproject.org/projects/waitress/en/latest/) and [PyPI package metadata](https://pypi.org/project/waitress/).
 
-These are conceptual responsibilities; no production service or complete corpus is implied.
+## Request flow
 
-## Data flow
+Client → HTTPS reverse proxy → private Waitress listener → WSGI validation, rate limit, error handling, security headers and request ID → versioned read-only route → JSON records and existing catalogue graph/coverage functions.
 
-Candidate → provenance and rights screening → metadata entry → schema validation → editorial review → versioned publication → periodic or event-triggered recheck. Corrections should be additive and traceable where practical.
+Static browser files and JSON API share an origin. CORS is not enabled. The proxy must overwrite forwarded headers; Waitress trusts a proxy only when an exact peer IP is configured. No wildcard proxy trust is permitted. In-process throttling is per process and supplements, rather than replaces, shared edge rate limits.
 
-## Design constraints
+## Data and legal integrity
 
-- Stable project record IDs distinct from official identifiers.
-- Preserve original source links and source dates; do not silently replace them.
-- Handle unavailable sources and conflicting versions explicitly.
-- Keep source text separate from project-authored metadata.
-- Minimize personal data and avoid collecting credentials or access-restricted content.
-- Support multiple document forms and relationships without assuming a simple law/amendment model.
+- Similarity matches remain suggestions and never create confirmed legal edges.
+- Record identity, legal force, temporal status, verification and reuse rights are separate.
+- Source texts and PDFs are not served or mirrored.
+- Coverage is scoped; “not located” does not assert non-existence.
 
-## Future considerations
+## Deployment boundary and remaining work
 
-A database, full-text indexing, OCR, APIs, or document storage require separate design and rights/privacy review. This specification does not authorize collection of restricted materials.
+Docker/Compose and an Nginx template are references, not an active public deployment. Domain availability/ownership, DNS, certificates, firewall rules, secrets storage, monitoring provider, backups, hosting capacity and incident response require operational setup. No production database or user-submitted content exists.
+
+## English summary
+
+Angola Legal uses version-controlled JSON as its catalogue. A framework-free WSGI application preserves API v1 and is served by Waitress with bounded worker/connection settings. A same-origin static browser client consumes the API. A separately operated reverse proxy provides HTTPS and edge controls. Deployment files are templates; this repository does not claim a live public service.

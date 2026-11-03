@@ -3,35 +3,54 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Angola Legal — Pesquisa</title>
+  <meta name="description" content="Pesquise metadados jurídicos angolanos com fontes, proveniência e estado de verificação visíveis.">
+  <meta name="theme-color" content="#183b35">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Angola Legal — conhecimento jurídico rastreável">
+  <meta property="og:description" content="Pesquisa pública de metadados jurídicos de Angola, com proveniência e limitações explícitas.">
+  <title>Angola Legal — pesquisa jurídica de Angola</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <header><p class="eyebrow">ANGOLA LEGAL · v0.8.0</p><h1>Pesquisa jurídica</h1><p>Consulte metadados, relações documentadas e lacunas do catálogo.</p></header>
-  <main>
-    <section class="panel">
-      <form id="search-form">
-        <label>Termo de pesquisa<input id="query" type="search" placeholder="Número, título ou assunto"></label>
-        <div class="filters">
-          <label>Natureza<select id="nature"><option value="">Todas</option></select></label>
+  <a class="skip-link" href="#main">Saltar para conteúdo</a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Angola Legal — início"><span class="brand-mark" aria-hidden="true">AL</span><span><strong>Angola Legal</strong><small>Conhecimento jurídico rastreável</small></span></a>
+    <nav aria-label="Navegação principal"><a href="#pesquisa">Pesquisar</a><a href="#fontes">Fontes</a><a href="#sobre">Sobre</a></nav>
+  </header>
+  <main id="main">
+    <section class="hero" id="sobre">
+      <div class="hero-copy"><p class="eyebrow">ANGOLA · CATÁLOGO DOCUMENTAL</p><h1>Encontre a norma.<br><em>Veja a evidência.</em></h1><p>Pesquisa de metadados jurídicos angolanos com fontes, relações e estados de verificação à vista.</p>
+        <form id="hero-form" class="hero-search"><label class="sr-only" for="hero-query">Pesquisar número, identificador, título ou assunto</label><input id="hero-query" type="search" placeholder="Ex.: Lei n.º 18/21 ou direito laboral"><button type="submit">Pesquisar</button></form>
+        <p class="hero-note">A publicação identificada não certifica vigência atual.</p>
+      </div>
+      <aside class="hero-card"><span class="eyebrow">COMO LER O CATÁLOGO</span><p><strong>Identidade</strong> e <strong>vigência</strong> são verificações diferentes.</p><p>Relações sugeridas nunca são apresentadas como confirmadas.</p><a href="#limites">Conheça os limites →</a></aside>
+    </section>
+    <section class="stats" aria-label="Estatísticas atuais do catálogo" id="stats"><p role="status">A carregar estatísticas…</p></section>
+    <section class="section" id="categorias"><div class="section-heading"><div><p class="eyebrow">EXPLORAR</p><h2>Áreas jurídicas</h2></div><p>Selecione uma área para iniciar uma pesquisa.</p></div><div id="categories" class="category-list"></div></section>
+    <section class="section search-section" id="pesquisa"><div class="section-heading"><div><p class="eyebrow">PESQUISA</p><h2>Catálogo jurídico</h2></div><p id="search-summary">Pesquise pelos campos disponíveis.</p></div>
+      <form id="search-form" class="filter-panel">
+        <label>Termo, número ou título<input id="query" type="search" maxlength="200" autocomplete="off"></label>
+        <div class="filter-grid">
+          <label>Natureza documental<select id="nature"><option value="">Todas</option></select></label>
+          <label>Instituição emissora<select id="institution"><option value="">Todas</option></select></label>
+          <label>Assunto<select id="subject"><option value="">Todos</option></select></label>
           <label>Força jurídica<select id="force"><option value="">Todas</option></select></label>
-          <label>Verificação<select id="verification"><option value="">Todas</option></select></label>
           <label>Estado temporal<select id="temporal"><option value="">Todos</option></select></label>
-          <label>Instituição<select id="institution"><option value="">Todas</option></select></label>
-          <label>Assunto<input id="subject" type="search" placeholder="Ex.: trabalho"></label>
+          <label>Verificação documental<select id="verification"><option value="">Todas</option></select></label>
           <label>Publicado desde<input id="date-from" type="date"></label>
           <label>Publicado até<input id="date-to" type="date"></label>
         </div>
-        <button type="submit">Pesquisar</button>
+        <div class="form-actions"><button type="submit">Aplicar filtros</button><button type="button" class="button-secondary" id="clear-filters">Limpar</button></div>
       </form>
+      <div id="results" aria-live="polite" aria-busy="false"></div>
+      <nav id="pagination" class="pagination" aria-label="Paginação de resultados"></nav>
     </section>
-    <section class="layout">
-      <div class="panel"><h2>Resultados <span id="count"></span></h2><div id="results" aria-live="polite"></div></div>
-      <aside class="panel"><h2>Cobertura</h2><div id="coverage"></div></aside>
-    </section>
-    <section class="panel"><h2>Relações documentadas</h2><p class="muted">Selecione “Ver relações” num registro. Correspondências sugeridas permanecem por verificar.</p><div id="graph"></div></section>
+    <section class="section" id="document-view" hidden aria-labelledby="document-title"><a href="#pesquisa" id="back-search">← Voltar à pesquisa</a><div id="document-content"></div></section>
+    <section class="section" id="fontes"><div class="section-heading"><div><p class="eyebrow">RASTREABILIDADE</p><h2>Fontes institucionais</h2></div><p>Registos de fonte descrevem âmbito e estatuto institucional.</p></div><div id="sources" class="source-grid" aria-live="polite"></div></section>
+    <section class="notice" id="limites"><h2>Âmbito e responsabilidade</h2><p>Angola Legal é um projeto de informação e investigação. Não é uma autoridade judicial nem substitui aconselhamento jurídico profissional. O catálogo é delimitado e não representa toda a legislação angolana. O estado temporal pode ser desconhecido; confirme sempre a situação jurídica nas fontes oficiais.</p></section>
+    <section class="section graph-section" id="grafo" hidden><div class="section-heading"><div><p class="eyebrow">RELAÇÕES DOCUMENTADAS</p><h2>Grafo jurídico</h2></div><p>Sugestões e referências pendentes permanecem claramente distintas.</p></div><div id="graph" aria-live="polite"></div></section>
   </main>
-  <footer>Metadados informativos. A situação temporal pode ser desconhecida; confirme sempre nas fontes oficiais.</footer>
-  <script src="/app.js"></script>
+  <footer><span>© Angola Legal · projeto open source</span><a href="/robots.txt">Robots</a><a href="/sitemap.xml">Sitemap</a></footer>
+  <script src="/app.js" defer></script>
 </body>
 </html>

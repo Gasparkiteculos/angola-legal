@@ -2,6 +2,15 @@
 
 All notable project changes are recorded here.
 
+## [0.9.0] - 2026-11-03
+
+- Replaced the development HTTP server with a Waitress WSGI server while preserving API v1 and read-only behavior.
+- Added request validation limits, process-local rate limiting, structured request logs, request IDs, liveness/readiness checks, uniform JSON errors, and security headers.
+- Added a responsive accessible public catalogue interface with search, filtering, pagination, document details, source provenance, and graph uncertainty states.
+- Added container/Compose and reverse-proxy reference configuration, dependency audit in CI, operations/API/deployment guidance, robots and origin-configured sitemap.
+- Prepared deployment only; no domain, TLS, hosting, analytics, or public service is configured.
+
+
 ## [0.8.0] - 2026-11-03
 
 - Added an independent, read-only JSON API for health, search/filtering, facets, document records, graph neighborhoods and coverage.
