@@ -70,7 +70,7 @@ jobs:
       - run: python scripts/validate_deployment.py
       - run: python scripts/validate_production_config.py
       - name: Validate production Caddy configuration
-        run: docker run --rm --env ANGOLA_DOMAIN=deployment-check.example.invalid -v "$PWD/deploy/Caddyfile:/etc/caddy/Caddyfile:ro" caddy:2-alpine validate --config /etc/caddy/Caddyfile --adapter caddyfile
+        run: docker run --rm --env ANGOLA_DOMAIN=deployment-check.example.invalid -v "$PWD/deploy/Caddyfile:/etc/caddy/Caddyfile:ro" caddy:2-alpine caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
       - name: Build and smoke-test the locked-down container
         env:
           ANGOLA_TRUSTED_PROXY: ""
