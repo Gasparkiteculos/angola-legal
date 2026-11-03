@@ -3,6 +3,11 @@ name: Validate document metadata and source registry
 on:
   push:
     paths:
+      - "Dockerfile"
+      - "docker-compose.yml"
+      - "requirements.txt"
+      - "deploy/**"
+      - "web/**"
       - "schemas/**"
       - "sources/**"
       - "records/**"
