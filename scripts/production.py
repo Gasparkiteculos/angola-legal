@@ -115,6 +115,7 @@ def _route(environ, request_id):
         API_PREFIX + "/search": {"q", "nature", "institution", "legal_force", "temporal_status",
                                  "verification_status", "subject", "date_from", "date_to", "limit", "offset"},
         API_PREFIX + "/facets": set(),
+        API_PREFIX + "/sources": set(),
         API_PREFIX + "/coverage": set(),
         API_PREFIX + "/graph": {"record_id", "depth"},
     }
