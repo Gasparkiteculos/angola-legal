@@ -47,7 +47,7 @@ class ProductionWsgiTests(unittest.TestCase):
 
     def test_errors_have_uniform_json_and_do_not_expose_exception_details(self):
         not_found = request("/missing")
-        self.assertEqual("404 Error", not_found["status"])
+        self.assertEqual("404 Not Found", not_found["status"])
         payload = json.loads(not_found["body"])
         self.assertEqual("Resource not found.", payload["error"]["message"])
         self.assertIn("request_id", payload)
@@ -91,7 +91,7 @@ class ProductionWsgiTests(unittest.TestCase):
 
     def test_sitemap_is_disabled_without_verified_public_origin_and_built_when_set(self):
         with patch.dict("os.environ", {"ANGOLA_PUBLIC_BASE_URL": ""}):
-            self.assertEqual("404 Error", request("/sitemap.xml")["status"])
+            self.assertEqual("404 Not Found", request("/sitemap.xml")["status"])
         with patch.dict("os.environ", {"ANGOLA_PUBLIC_BASE_URL": "https://legal.example"}):
             sitemap = request("/sitemap.xml")
             robots = request("/robots.txt")
@@ -104,7 +104,7 @@ class ProductionWsgiTests(unittest.TestCase):
         self.assertEqual("200 OK", page["status"])
         self.assertIn(b"<title>Lei n.", page["body"])
         missing = request("/documents/not-found")
-        self.assertEqual("404 Error", missing["status"])
+        self.assertEqual("404 Not Found", missing["status"])
 
     def test_limiter_storage_is_bounded(self):
         limiter = production.TokenBucketLimiter(rate=60, capacity=5, max_clients=3)
