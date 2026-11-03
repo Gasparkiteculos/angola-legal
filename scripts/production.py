@@ -112,7 +112,23 @@ def _route(environ, request_id):
         description = html.escape(str(record.get("official_identifier") or "Metadados jurídicos com fonte e estado de verificação."))
         origin = os.getenv("ANGOLA_PUBLIC_BASE_URL", "").rstrip("/")
         canonical = f'<link rel="canonical" href="{html.escape(origin + path, quote=True)}">' if origin.startswith("https://") else ""
-        payload = f'<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{description}"><meta property="og:title" content="{title}"><title>{title} — Angola Legal</title>{canonical}<link rel="stylesheet" href="/styles.css"></head><body><main><p class="eyebrow">ANGOLA LEGAL · REGISTRO DOCUMENTAL</p><h1>{title}</h1><p>{description}</p><p>Verificação: {html.escape(str(record.get("verification_status") or "desconhecida"))} · estado temporal: {html.escape(str(record.get("temporal_status") or "desconhecido"))}</p><p>Projeto informativo; consulte a fonte e confirme a situação jurídica atual.</p><a href="/?record={quote(record_id, safe='')}">Abrir ficha completa</a></main><script src="/app.js" defer></script></body></html>'
+        try:
+            payload = (WEB / "index.html").read_text(encoding="utf-8")
+        except OSError:
+            raise ApiError(404, "Resource not found.")
+        payload = payload.replace("<title>Angola Legal — pesquisa jurídica de Angola</title>",
+                                  f"<title>{title} — Angola Legal</title>")
+        payload = payload.replace('name="description" content="Pesquise metadados jurídicos angolanos com fontes, proveniência e estado de verificação."',
+                                  f'name="description" content="{description}"')
+        payload = payload.replace('property="og:title" content="Angola Legal — conhecimento jurídico rastreável"',
+                                  f'property="og:title" content="{title}"')
+        if origin.startswith("https://"):
+            canonical_tag = f'<link rel="canonical" href="{html.escape(origin + path, quote=True)}">'
+            payload = payload.replace('  <link rel="stylesheet" href="/styles.css">', f'  {canonical_tag}\\n  <link rel="stylesheet" href="/styles.css">')
+        marker = '<section class="section" id="document-view" hidden aria-labelledby="document-title"><a href="#pesquisa" id="back-search">← Voltar à pesquisa</a><div id="document-content"></div></section>'
+        summary = f'<section class="section" id="document-view" aria-labelledby="document-title"><a href="/" id="back-search">← Voltar à pesquisa</a><div id="document-content"><p class="eyebrow">ANGOLA LEGAL · REGISTRO DOCUMENTAL</p><h1 id="document-title">{title}</h1><p>{description}</p><p>Verificação: {html.escape(str(record.get("verification_status") or "desconhecida"))} · estado temporal: {html.escape(str(record.get("temporal_status") or "desconhecido"))}</p><p>Projeto informativo; consulte a fonte e confirme a situação jurídica atual.</p></div></section>'
+        payload = payload.replace(marker, summary)
+        payload = payload.replace('<section class="section" id="grafo" hidden>', '<section class="section" id="grafo">')
         return 200, payload.encode("utf-8"), "text/html; charset=utf-8", "public, max-age=300"
     if path in ("/", "/app.js", "/styles.css"):
         file_name = {"/": "index.html", "/app.js": "app.js", "/styles.css": "styles.css"}[path]
