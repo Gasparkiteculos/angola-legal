@@ -9,6 +9,7 @@ from urllib.parse import parse_qs, unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORDS = ROOT / "records" / "angola"
+WEB = ROOT / "web"
 API_PREFIX = "/api/v1"
 
 
