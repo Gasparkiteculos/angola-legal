@@ -176,7 +176,7 @@ def application(environ, start_response):
             status_line = "429 Too Many Requests"
         else:
             code, payload, content_type, cache_control = _route(environ, request_id)
-            status_line = {200: "200 OK"}.get(code, f"{code} Error")
+            status_line = {200: "200 OK", 400: "400 Bad Request", 404: "404 Not Found", 405: "405 Method Not Allowed", 414: "414 URI Too Long", 429: "429 Too Many Requests", 503: "503 Service Unavailable"}.get(code, "500 Internal Server Error")
     except ApiError as exc:
         status_line = {400: "400 Bad Request", 404: "404 Not Found", 405: "405 Method Not Allowed",
                        414: "414 URI Too Long", 429: "429 Too Many Requests",
