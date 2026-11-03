@@ -8,7 +8,7 @@
 4. **Read-only API v1:** pure route/query logic in `scripts/api.py`; WSGI middleware and operational controls in `scripts/production.py`.
 5. **WSGI server:** Waitress supplies bounded worker and connection handling; the app remains framework-free.
 6. **Browser client:** static HTML/CSS/JavaScript consumes the same-origin API. It is replaceable without changing the API data contract.
-7. **Reverse proxy:** TLS termination, edge rate limits, domain routing and deployment-specific access controls belong to a separately managed proxy/load balancer.
+7. **Production edge:** a Caddy reverse proxy terminates TLS and routes to Waitress on a private Docker network. CORS stays disabled.
 
 ## Rationale
 
@@ -16,9 +16,11 @@ Waitress is a maintained, pure-Python, production-quality WSGI server with Windo
 
 ## Request flow
 
-Client → HTTPS reverse proxy → private Waitress listener → WSGI validation, rate limit, error handling, security headers and request ID → versioned read-only route → JSON records and existing catalogue graph/coverage functions.
+Client → Caddy HTTPS reverse proxy → private Waitress listener → WSGI validation, rate limit, error handling, security headers and request ID → versioned read-only route → JSON records and existing catalogue graph/coverage functions.
 
-Static browser files and JSON API share an origin. CORS is not enabled. The proxy must overwrite forwarded headers; the Compose service passes ANGOLA_TRUSTED_PROXY to Waitress, which trusts only one validated exact IPv4/IPv6 peer address. Empty disables trust, and invalid/wildcard values fail startup. No wildcard proxy trust is permitted. In-process throttling is per process and supplements, rather than replaces, shared edge rate limits.
+The production Compose stack publishes only Caddy on ports 80/443. The application has no host port; its private internal network gives Caddy the fixed peer address `172.29.0.2`. Waitress trusts that one exact proxy address and accepts its forwarded client address and HTTPS scheme. The app and proxy run as non-root where supported, use read-only filesystems, drop capabilities, and use bounded temporary storage. The public Caddy certificate state is kept in named Docker volumes.
+
+The application rate limiter is bounded and process-local. With the single production instance it receives the true client IP from the configured Caddy proxy. Horizontal replicas would each have separate limiter state and require shared rate controls before scaling.
 
 ## Data and legal integrity
 
@@ -26,11 +28,12 @@ Static browser files and JSON API share an origin. CORS is not enabled. The prox
 - Record identity, legal force, temporal status, verification and reuse rights are separate.
 - Source texts and PDFs are not served or mirrored.
 - Coverage is scoped; “not located” does not assert non-existence.
+- The API is read-only; non-GET/HEAD methods remain rejected.
 
 ## Deployment boundary and remaining work
 
-Docker/Compose and an Nginx template are references, not an active public deployment. Domain availability/ownership, DNS, certificates, firewall rules, secrets storage, monitoring provider, backups, hosting capacity and incident response require operational setup. No production database or user-submitted content exists.
+The production files are a tested template, not an active hosting account or public deployment. Server purchase, verified domain, DNS, provider firewall rules, SSH access, alerting and external HTTPS/API smoke checks require owner configuration. Caddy obtains and renews certificates automatically when the verified DNS and firewall prerequisites are in place. There is no production database or user-submitted content.
 
 ## English summary
 
-Angola Legal uses version-controlled JSON as its catalogue. A framework-free WSGI application preserves API v1 and is served by Waitress with bounded worker/connection settings. A same-origin static browser client consumes the API. A separately operated reverse proxy provides HTTPS and edge controls. Deployment files are templates; this repository does not claim a live public service.
+Angola Legal uses version-controlled JSON as its catalogue. A framework-free WSGI application preserves API v1 and is served by Waitress with bounded worker/connection settings. A same-origin static browser client consumes the API. The production profile uses Docker Compose and Caddy on a single Linux VPS; TLS terminates at Caddy, and Waitress is reachable only on a private network. The repository does not claim a live public service.

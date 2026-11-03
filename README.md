@@ -25,19 +25,13 @@ The project may catalogue, subject to provenance, access, privacy and reuse-righ
 
 A taxonomia é aberta: a inclusão não depende de o documento ser uma lei, mas da sua relevância jurídica e da possibilidade legítima de o catalogar.
 
-## Core principles | Princípios
-
-1. **Source provenance:** record where each item came from and when it was collected.
-2. **No false certainty:** distinguish verified facts from inferred, pending or unknown information.
-3. **Separate dimensions:** document type, legal force, temporal status, verification status and reuse rights are independent fields.
-4. **Respect rights and privacy:** public availability does not automatically grant redistribution rights.
-5. **Traceability:** preserve identifiers, versions, relationships and change history.
-6. **Bilingual documentation:** project documentation is maintained in Portuguese and English.
-7. **No completeness claims without evidence:** coverage must be measured and qualified.
-
 ## Repository status | Estado do repositório
 
-Version **0.9.0** prepares the catalogue for public deployment with a Waitress WSGI server, bounded request handling, read-only API, request IDs, structured logs, process-local rate limiting, security headers, and an accessible responsive interface. The interface provides searchable document pages, source links, coverage and explicit uncertainty. Deployment templates keep the app on loopback behind a separately configured HTTPS proxy. This release is prepared for deployment but is not hosted publicly; it does not certify current legal status or catalogue completeness.
+Version **0.10.0** adds a production deployment profile for a small Linux VPS using Docker Compose, Caddy-managed HTTPS, a private application network, persistent TLS state, and an exact trusted-proxy address. The API remains read-only. CI validates metadata and source data, runs tests and dependency auditing, builds and smoke-tests the application image, and validates the production Compose and Caddy configuration.
+
+The project is **prepared for deployment but is not hosted publicly**. Hosting, a verified domain, DNS records, provider firewall rules, monitoring alerts, and production credentials still require owner configuration. This release does not certify current legal status or catalogue completeness.
+
+O projeto está preparado para deployment, mas ainda não está publicado na Internet. O hosting, um domínio verificado, DNS, regras de firewall, alertas de monitorização e credenciais de produção dependem de configuração pelo titular.
 
 The repository does **not** claim a complete or current consolidated corpus of Angolan legal materials. Legal-document verification records the evidence checked; temporal status remains separate and may be unknown. The earlier illustrative sample is fictional, not a real legal instrument.
 
@@ -53,7 +47,8 @@ The repository does **not** claim a complete or current consolidated corpus of A
 - `docs/RECORD-CATALOG.md` and `records/angola/` — catalogue, provenance and document records;
 - `coverage/catalogue-coverage.json`, `schemas/catalogue-coverage.schema.json` and `docs/COVERAGE-AND-API-READINESS.md` — scoped coverage and API/UI data contract;
 - `scripts/api.py`, `scripts/production.py` and `web/` — read-only JSON API and browser interface;
-- `docs/DEPLOYMENT.md`, `docs/PUBLIC-API.md`, `deploy/` and `Dockerfile` — deployment, API and proxy reference;
+- `docs/DEPLOYMENT.md`, `docs/PUBLIC-API.md`, `deploy/`, `docker-compose.production.yml` and `Dockerfile` — deployment, API, container and proxy reference;
+- `docs/HOSTING-DECISION.md` — hosting selection, dated cost estimate and contingency;
 - `docs/SEARCH-VERSIONS.md`, `docs/DATA-MODEL.md` and `scripts/catalog.py` — graph, local metadata search, version reporting and snapshot comparison;
 - `docs/SPECIFICATION.md`, `docs/LEGAL-TAXONOMY.md`, `docs/DATA-MODEL.md`;
 - `docs/EDITORIAL-POLICY.md`, `docs/ARCHITECTURE.md`, `CONTRIBUTING.md`, `DATA-LICENSE.md`.
@@ -69,8 +64,10 @@ python scripts/catalog.py check-graph
 python scripts/catalog.py coverage
 python scripts/api.py
 # open http://127.0.0.1:8000
-# container: docker compose up --build
+# local container: docker compose up --build
 ```
+
+For production deployment, follow `docs/DEPLOYMENT.md`. Do not put credentials, private keys, or production environment files in Git. A custom domain must be owned and verified before setting its DNS or public base URL.
 
 ## Contributing | Contribuir
 
