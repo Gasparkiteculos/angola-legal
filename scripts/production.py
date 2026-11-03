@@ -6,6 +6,7 @@ import logging
 import os
 import threading
 import time
+from urllib.parse import quote
 import uuid
 from collections import OrderedDict
 from pathlib import Path
@@ -86,9 +87,20 @@ def _route(environ, request_id):
         raise ApiError(414, "Path is too long.")
     if method not in ("GET", "HEAD"):
         raise ApiError(405, "This service is read-only.")
-    if path in ("/", "/app.js", "/styles.css", "/robots.txt", "/sitemap.xml"):
-        file_name = {"/": "index.html", "/app.js": "app.js", "/styles.css": "styles.css",
-                     "/robots.txt": "robots.txt", "/sitemap.xml": "sitemap.xml"}[path]
+    if path == "/robots.txt":
+        origin = os.getenv("ANGOLA_PUBLIC_BASE_URL", "").rstrip("/")
+        text = "User-agent: *\\nAllow: /\\n" + (f"Sitemap: {origin}/sitemap.xml\\n" if origin.startswith("https://") else "")
+        return 200, text.encode("utf-8"), "text/plain; charset=utf-8", "public, max-age=300"
+    if path == "/sitemap.xml":
+        origin = os.getenv("ANGOLA_PUBLIC_BASE_URL", "").rstrip("/")
+        if not origin.startswith("https://"):
+            raise ApiError(404, "Resource not found.")
+        from api import load_records
+        urls = [origin + "/", *[origin + "/?record=" + quote(r["record_id"], safe="") for r in load_records()]]
+        xml = '<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{u}</loc></url>" for u in urls) + "</urlset>"
+        return 200, xml.encode("utf-8"), "application/xml; charset=utf-8", "public, max-age=300"
+    if path in ("/", "/app.js", "/styles.css"):
+        file_name = {"/": "index.html", "/app.js": "app.js", "/styles.css": "styles.css"}[path]
         file_path = WEB / file_name
         try:
             payload = file_path.read_bytes()
@@ -193,6 +205,13 @@ def main():
     threads = int(os.getenv("ANGOLA_THREADS", "8"))
     connection_limit = int(os.getenv("ANGOLA_CONNECTION_LIMIT", "128"))
     channel_timeout = int(os.getenv("ANGOLA_CHANNEL_TIMEOUT", "30"))
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    options = {}
+    trusted_proxy = os.getenv("ANGOLA_TRUSTED_PROXY")
+    if trusted_proxy:
+        options.update(trusted_proxy=trusted_proxy,
+                       trusted_proxy_headers={"x-forwarded-for", "x-forwarded-proto"},
+                       clear_untrusted_proxy_headers=True)
     serve(application, host=host, port=port, threads=threads, connection_limit=connection_limit,
           channel_timeout=channel_timeout, max_request_header_size=8192,
-          max_request_body_size=0, expose_tracebacks=False, ident="AngolaLegal")
+          max_request_body_size=0, expose_tracebacks=False, ident="AngolaLegal", **options)
