@@ -2,6 +2,16 @@
 
 All notable project changes are recorded here.
 
+## [0.10.0] - 2026-11-03
+
+- Added a hardened production Docker image and a separate production Compose profile for a single Linux VPS.
+- Added Caddy as an HTTPS reverse proxy with persistent certificate state; kept the Waitress application private and read-only.
+- Bound proxy trust to Caddy's fixed private-network address so per-client rate limiting uses the forwarded client address safely.
+- Added a hosting decision with current, official provider pricing and a managed-platform contingency.
+- Updated deployment, backup, recovery, firewall, TLS, logging and manual activation instructions.
+- Expanded CI to validate production Compose and the Caddyfile; no unattended production deployment is enabled.
+- Hosting, domain ownership, DNS, firewall, credentials and public availability remain unconfigured.
+
 ## [0.9.1] - 2026-11-03
 
 - Passed ANGOLA_TRUSTED_PROXY through Compose; proxy trust remains opt-in and now validates an exact IPv4/IPv6 address.
