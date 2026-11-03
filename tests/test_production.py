@@ -143,6 +143,13 @@ class ProductionWsgiTests(unittest.TestCase):
             outcomes = list(pool.map(lambda _: limiter.allow("one-client"), range(80)))
         self.assertEqual(1, sum(outcomes))
 
+    def test_rate_limit_buckets_are_isolated_between_replicas(self):
+        first = production.TokenBucketLimiter(rate=0, capacity=1)
+        second = production.TokenBucketLimiter(rate=0, capacity=1)
+        self.assertTrue(first.allow("198.51.100.8"))
+        self.assertFalse(first.allow("198.51.100.8"))
+        self.assertTrue(second.allow("198.51.100.8"))
+
     def test_query_size_depth_and_document_ids_are_rejected_safely(self):
         oversized = request("/api/v1/search?q=" + "x" * 2100)
         high_depth = request("/api/v1/graph?depth=4")
