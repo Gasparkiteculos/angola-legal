@@ -25,9 +25,9 @@ async function init() {
   renderCategories(facets.facets.subject_matter);
   renderSources(sources.sources);
   restoreUrlState();
-  const initialRecord = new URLSearchParams(location.search).get("record");
+  const initialRecord = new URLSearchParams(location.search).get("record") || (location.pathname.startsWith("/documents/") ? decodeURIComponent(location.pathname.slice("/documents/".length)) : null);
   if (initialRecord) await openDocument(initialRecord); else await search(false);
-  window.addEventListener("popstate", () => { const record = new URLSearchParams(location.search).get("record"); if (record) openDocument(record); else { $("document-view").hidden=true; $("pesquisa").hidden=false; $("grafo").hidden=true; restoreUrlState(); search(false); } });
+  window.addEventListener("popstate", () => { const record = new URLSearchParams(location.search).get("record") || (location.pathname.startsWith("/documents/") ? decodeURIComponent(location.pathname.slice("/documents/".length)) : null); if (record) openDocument(record); else { $("document-view").hidden=true; $("pesquisa").hidden=false; $("grafo").hidden=true; restoreUrlState(); search(false); } });
 }
 function renderStats(total, coverage, graph, sourceCount) {
   const counts=coverage.target_counts;
@@ -74,7 +74,7 @@ async function search(updateUrl=true, offset=0) {
   finally {$("results").setAttribute("aria-busy","false");}
 }
 function renderResult(r) {
-  return `<article class="result-card"><div><p class="eyebrow">${escapeHtml(r.document_nature)} · ${escapeHtml(r.date_published||"data desconhecida")}</p><h3><button class="text-link" data-document="${escapeHtml(r.record_id)}">${escapeHtml(r.title)}</button></h3><p>${escapeHtml(r.official_identifier||"Identificador não disponível")}</p><p class="muted">${escapeHtml(r.issuing_authority||"Entidade emissora desconhecida")}</p></div><div class="chips"><span>${escapeHtml(r.verification_status)}</span><span>força: ${escapeHtml(r.legal_force||"desconhecida")}</span><span>vigência: ${escapeHtml(r.temporal_status||"desconhecida")}</span></div></article>`;
+  return `<article class="result-card"><div><p class="eyebrow">${escapeHtml(r.document_nature)} · ${escapeHtml(r.date_published||"data desconhecida")}</p><h3><a class="text-link" href="/documents/${encodeURIComponent(r.record_id)}" data-document="${escapeHtml(r.record_id)}">${escapeHtml(r.title)}</a></h3><p>${escapeHtml(r.official_identifier||"Identificador não disponível")}</p><p class="muted">${escapeHtml(r.issuing_authority||"Entidade emissora desconhecida")}</p></div><div class="chips"><span>${escapeHtml(r.verification_status)}</span><span>força: ${escapeHtml(r.legal_force||"desconhecida")}</span><span>vigência: ${escapeHtml(r.temporal_status||"desconhecida")}</span></div></article>`;
 }
 function renderPagination(data) {
   const pages=Math.ceil(data.total/data.limit), current=Math.floor(data.offset/data.limit);
@@ -88,7 +88,7 @@ function showError(error) {$("results").innerHTML=`<div class="error" role="aler
 async function openDocument(id) {
   $("document-view").hidden=false;$("pesquisa").hidden=true;$("grafo").hidden=true;
   $("document-content").innerHTML='<p role="status">A carregar o registro…</p>';
-  history.pushState(null,"","?record="+encodeURIComponent(id));
+  history.pushState(null,"","/documents/"+encodeURIComponent(id));
   try {
     const r=await api("/api/v1/documents/"+encodeURIComponent(id));
     $("document-content").innerHTML=renderDocument(r);
