@@ -2,6 +2,16 @@
 
 All notable project changes are recorded here.
 
+## [0.9.1] - 2026-11-03
+
+- Passed ANGOLA_TRUSTED_PROXY through Compose; proxy trust remains opt-in and now validates an exact IPv4/IPv6 address.
+- Added socket-level Waitress tests for trusted and untrusted forwarded headers and the client identity used by the rate limiter.
+- Added Compose/Nginx boundary checks, container build and runtime smoke checks in CI.
+- Fixed Nginx's HTTP redirect to use the configured server name and return 429 for edge rate limits.
+- Added idle rate-limit bucket expiry, stricter readiness checks and rejection of graph depths outside 0–3.
+- Pinned the sole runtime dependency and documented proxy, readiness, and per-process rate-limit behavior.
+- Added changelog integrity checks and clarified the static-only Nginx validation boundary.
+
 ## [0.9.0] - 2026-11-03
 
 - Replaced the development HTTP server with a Waitress WSGI server while preserving API v1 and read-only behavior.

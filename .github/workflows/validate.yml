@@ -65,3 +65,13 @@ jobs:
       - run: node --check web/app.js
       - run: pip-audit --requirement requirements.txt
       - run: docker compose config --quiet
+      - run: python scripts/validate_deployment.py
+      - name: Build and smoke-test the locked-down container
+        env:
+          ANGOLA_TRUSTED_PROXY: ""
+        run: |
+          docker compose up --build --detach --wait
+          python scripts/smoke_deployment.py
+      - name: Stop test containers
+        if: always()
+        run: docker compose down --remove-orphans

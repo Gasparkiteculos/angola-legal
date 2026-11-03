@@ -1,10 +1,11 @@
 # Security operations | Operações de segurança
 
 - Keep application ports private; TLS belongs at a maintained reverse proxy/load balancer.
+- CI statically checks selected directives in the Nginx example. It does not run `nginx -t`, start Nginx, or test a complete Client → Nginx → Waitress request. Waitress socket tests cover Waitress trust behavior only; run syntax and end-to-end checks in the target environment before exposure.
 - Never commit secrets, private keys, production .env files, logs with personal data, or legal-source files without rights review.
-- Waitress proxy trust is opt-in and exact-IP only. The proxy must overwrite forwarded headers. Do not set a wildcard.
+- Waitress proxy trust is opt-in and accepts one exact IPv4 or IPv6 peer address only; invalid values and wildcards fail startup. Compose passes ANGOLA_TRUSTED_PROXY through (empty leaves proxy trust disabled). Nginx replaces X-Forwarded-For with $remote_addr and X-Forwarded-Proto with https. Do not append untrusted values or set a wildcard.
 - Same-origin UI/API means CORS remains disabled. A separate client origin requires a reviewed allowlist.
-- Rate limiting is bounded and process-local; use shared edge controls before horizontal scaling.
+- Rate limiting is bounded, thread-safe, process-local, and removes idle buckets after a full refill interval. Nginx also applies per-source edge limiting and returns 429. Each replica has its own application buckets; use shared edge controls before horizontal scaling.
 - Apply security updates and review advisories; CI runs pip-audit for runtime dependencies.
 - App errors do not return tracebacks or filesystem paths. Request IDs link client errors to JSON logs; query strings and client IPs are excluded from app logs.
 - Use /health/live and /health/ready for monitoring. Configure alerts and retention in the hosting environment.

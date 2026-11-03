@@ -18,7 +18,7 @@ Waitress is a maintained, pure-Python, production-quality WSGI server with Windo
 
 Client → HTTPS reverse proxy → private Waitress listener → WSGI validation, rate limit, error handling, security headers and request ID → versioned read-only route → JSON records and existing catalogue graph/coverage functions.
 
-Static browser files and JSON API share an origin. CORS is not enabled. The proxy must overwrite forwarded headers; Waitress trusts a proxy only when an exact peer IP is configured. No wildcard proxy trust is permitted. In-process throttling is per process and supplements, rather than replaces, shared edge rate limits.
+Static browser files and JSON API share an origin. CORS is not enabled. The proxy must overwrite forwarded headers; the Compose service passes ANGOLA_TRUSTED_PROXY to Waitress, which trusts only one validated exact IPv4/IPv6 peer address. Empty disables trust, and invalid/wildcard values fail startup. No wildcard proxy trust is permitted. In-process throttling is per process and supplements, rather than replaces, shared edge rate limits.
 
 ## Data and legal integrity
 
