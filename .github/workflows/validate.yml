@@ -63,15 +63,14 @@ jobs:
       - run: python -c "import json; from jsonschema import Draft202012Validator, FormatChecker; schema=json.load(open('schemas/catalogue-coverage.schema.json', encoding='utf-8')); data=json.load(open('coverage/catalogue-coverage.json', encoding='utf-8')); Draft202012Validator.check_schema(schema); Draft202012Validator(schema, format_checker=FormatChecker()).validate(data)"
       - run: python scripts/catalog.py check-graph
       - run: python scripts/catalog.py coverage
-      - run: python -m py_compile scripts/api.py scripts/production.py scripts/catalog.py
+      - run: python -m py_compile scripts/api.py scripts/production.py scripts/catalog.py scripts/validate_production_config.py
       - run: node --check web/app.js
       - run: pip-audit --requirement requirements.txt
       - run: docker compose config --quiet
       - run: python scripts/validate_deployment.py
+      - run: python scripts/validate_production_config.py
       - name: Validate production Caddy configuration
-        env:
-          ANGOLA_DOMAIN: deployment-check.example.invalid
-        run: docker run --rm --env ANGOLA_DOMAIN caddy:2-alpine caddy validate --config /dev/stdin --adapter caddyfile < deploy/Caddyfile
+        run: docker run --rm --env ANGOLA_DOMAIN=deployment-check.example.invalid -v "$PWD/deploy/Caddyfile:/etc/caddy/Caddyfile:ro" caddy:2-alpine validate --config /etc/caddy/Caddyfile --adapter caddyfile
       - name: Build and smoke-test the locked-down container
         env:
           ANGOLA_TRUSTED_PROXY: ""
