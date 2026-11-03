@@ -20,6 +20,13 @@ def load_coverage():
     return json.loads((ROOT / "coverage" / "catalogue-coverage.json").read_text(encoding="utf-8"))
 
 
+def load_sources():
+    registry = json.loads((ROOT / "sources" / "source-registry.json").read_text(encoding="utf-8"))
+    fields = ("id", "source_name", "institution", "source_url", "source_type",
+              "jurisdiction_coverage", "verification_status")
+    return {"sources": [{key: source.get(key) for key in fields} for source in registry["sources"]]}
+
+
 def _text(value):
     if isinstance(value, dict):
         return " ".join(_text(item) for item in value.values())
@@ -127,6 +134,8 @@ def dispatch(path, records=None, coverage=None):
             return 200, "application/json; charset=utf-8", search_documents(records, params)
         except ValueError as exc:
             return 400, "application/json; charset=utf-8", {"error": str(exc)}
+    if route == API_PREFIX + "/sources":
+        return 200, "application/json; charset=utf-8", load_sources()
     if route == API_PREFIX + "/facets":
         return 200, "application/json; charset=utf-8", document_facets(records)
     if route == API_PREFIX + "/coverage":
