@@ -10,7 +10,7 @@ The ledger and report expose counts so a future API or interface can show covera
 
 The catalogue resolver creates an edge only for a unique exact identifier match. Normalized similarity is a review hint with a score and method; it remains attached to an unresolved node and never creates a confirmed legal relationship. Editors must inspect primary documentary evidence and record the source URL on the asserting document before confirming an edge.
 
-Relationship edges retain the asserting record, source URL, and verification status. The graph is a deterministic JSON contract suitable for later API/UI consumption, but this release does not provide an HTTP API or visual interface. Consumers must preserve unresolved nodes, evidence, and independent legal-force and temporal-status fields.
+Relationship edges retain the asserting record, source URL, and verification status. The graph is a deterministic JSON contract suitable for later API/UI consumption, the HTTP API and browser interface are implemented separately. Consumers must preserve unresolved nodes, evidence, and independent legal-force and temporal-status fields.
 
 ## Version identity
 
@@ -38,3 +38,8 @@ Start the local development server with `python scripts/api.py`; it binds to `12
 - `GET /api/v1/coverage` — scoped counts and target states.
 
 Responses are JSON. Unknown routes/documents return 404; invalid pagination/depth returns 400. The API exposes source URLs and relationship evidence, and does not serve or proxy source texts/PDFs. It offers no write endpoints. The browser interface consumes this API and may be replaced without changing the route/data contract. Before public deployment, place it behind a production-grade server and review operational security, availability, rate limits and cross-origin policy.
+
+
+## Deployment status
+
+Version 0.9.0 provides a read-only WSGI API and browser client. See [deployment operations](DEPLOYMENT.md) and [API v1](PUBLIC-API.md). A domain, DNS, TLS certificate and public hosting are not configured. Catalogue coverage remains scoped and explicitly non-exhaustive.
