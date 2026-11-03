@@ -99,9 +99,21 @@ def _route(environ, request_id):
         if parsed_origin.scheme != "https" or not parsed_origin.hostname or parsed_origin.username or parsed_origin.password or parsed_origin.query or parsed_origin.fragment:
             raise ApiError(404, "Resource not found.")
         from api import load_records
-        urls = [origin + "/", *[origin + "/?record=" + quote(r["record_id"], safe="") for r in load_records()]]
+        urls = [origin + "/", *[origin + "/documents/" + quote(r["record_id"], safe="") for r in load_records()]]
         xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{html.escape(u)}</loc></url>" for u in urls) + "</urlset>"
         return 200, xml.encode("utf-8"), "application/xml; charset=utf-8", "public, max-age=300"
+    if path.startswith("/documents/"):
+        from api import load_records
+        record_id = path[len("/documents/"):]
+        record = next((item for item in load_records() if item.get("record_id") == record_id), None)
+        if record is None:
+            raise ApiError(404, "Resource not found.")
+        title = html.escape(str(record.get("title") or "Documento jurídico"))
+        description = html.escape(str(record.get("official_identifier") or "Metadados jurídicos com fonte e estado de verificação."))
+        origin = os.getenv("ANGOLA_PUBLIC_BASE_URL", "").rstrip("/")
+        canonical = f'<link rel="canonical" href="{html.escape(origin + path, quote=True)}">' if origin.startswith("https://") else ""
+        payload = f'<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="{description}"><meta property="og:title" content="{title}"><title>{title} — Angola Legal</title>{canonical}<link rel="stylesheet" href="/styles.css"></head><body><main><p class="eyebrow">ANGOLA LEGAL · REGISTRO DOCUMENTAL</p><h1>{title}</h1><p>{description}</p><p>Verificação: {html.escape(str(record.get("verification_status") or "desconhecida"))} · estado temporal: {html.escape(str(record.get("temporal_status") or "desconhecido"))}</p><p>Projeto informativo; consulte a fonte e confirme a situação jurídica atual.</p><a href="/?record={quote(record_id, safe='')}">Abrir ficha completa</a></main><script src="/app.js" defer></script></body></html>'
+        return 200, payload.encode("utf-8"), "text/html; charset=utf-8", "public, max-age=300"
     if path in ("/", "/app.js", "/styles.css"):
         file_name = {"/": "index.html", "/app.js": "app.js", "/styles.css": "styles.css"}[path]
         file_path = WEB / file_name
