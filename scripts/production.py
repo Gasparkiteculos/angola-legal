@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import html
+import ipaddress
 from urllib.parse import urlsplit
 import logging
 import os
@@ -35,6 +36,14 @@ class TokenBucketLimiter:
     def allow(self, key, now=None):
         now = time.monotonic() if now is None else now
         with self._lock:
+            if self.rate > 0:
+                full_refill_seconds = self.window * self.capacity / self.rate
+                expiry = now - full_refill_seconds
+                while self._buckets:
+                    oldest_key, (_, updated) = next(iter(self._buckets.items()))
+                    if updated > expiry:
+                        break
+                    self._buckets.pop(oldest_key)
             tokens, updated = self._buckets.pop(key, (float(self.capacity), now))
             tokens = min(float(self.capacity), tokens + (now - updated) * self.rate / self.window)
             if tokens < 1:
@@ -46,10 +55,20 @@ class TokenBucketLimiter:
             return True
 
 
+def _bounded_int(env, name, default, minimum, maximum):
+    try:
+        value = int(env.get(name, str(default)))
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"{name} must be an integer.") from exc
+    if value < minimum or value > maximum:
+        raise ValueError(f"{name} must be between {minimum} and {maximum}.")
+    return value
+
+
 LIMITER = TokenBucketLimiter(
-    rate=int(os.getenv("ANGOLA_RATE_LIMIT_PER_MINUTE", "60")),
+    rate=_bounded_int(os.environ, "ANGOLA_RATE_LIMIT_PER_MINUTE", 60, 1, 60000),
     window=60,
-    capacity=int(os.getenv("ANGOLA_RATE_LIMIT_BURST", "120")),
+    capacity=_bounded_int(os.environ, "ANGOLA_RATE_LIMIT_BURST", 120, 1, 100000),
 )
 
 
@@ -144,10 +163,20 @@ def _route(environ, request_id):
     if path in ("/health/live", "/health/ready"):
         if path.endswith("ready"):
             try:
-                from api import load_coverage, load_records
-                load_records()
-                load_coverage()
-            except (OSError, ValueError, json.JSONDecodeError):
+                from api import load_coverage, load_records, load_sources
+                records = load_records()
+                coverage = load_coverage()
+                sources = load_sources()
+                if (not isinstance(records, list) or not records
+                        or any(not isinstance(record, dict)
+                               or not record.get("record_id")
+                               or not record.get("title") for record in records)
+                        or not isinstance(coverage, dict)
+                        or not isinstance(coverage.get("target_counts"), dict)
+                        or not isinstance(sources, dict)
+                        or not isinstance(sources.get("sources"), list)):
+                    raise ValueError("Core catalogue data has an invalid shape.")
+            except (OSError, ValueError, TypeError, KeyError):
                 raise ApiError(503, "Service is not ready.")
         return 200, _json_bytes({"status": "ok", "request_id": request_id}), "application/json; charset=utf-8", "no-store"
     if not path.startswith(API_PREFIX + "/"):
@@ -229,20 +258,35 @@ def application(environ, start_response):
     return [b"" if method == "HEAD" else payload]
 
 
+def waitress_options(env=None):
+    """Build validated Waitress settings; proxy trust is exact-IP and opt-in."""
+    env = os.environ if env is None else env
+    options = {
+        "host": env.get("ANGOLA_HOST", "127.0.0.1"),
+        "port": _bounded_int(env, "ANGOLA_PORT", 8000, 1, 65535),
+        "threads": _bounded_int(env, "ANGOLA_THREADS", 8, 1, 64),
+        "connection_limit": _bounded_int(env, "ANGOLA_CONNECTION_LIMIT", 128, 1, 4096),
+        "channel_timeout": _bounded_int(env, "ANGOLA_CHANNEL_TIMEOUT", 30, 1, 300),
+        "max_request_header_size": 8192,
+        "max_request_body_size": 0,
+        "expose_tracebacks": False,
+        "ident": "AngolaLegal",
+    }
+    trusted_proxy = env.get("ANGOLA_TRUSTED_PROXY", "").strip()
+    if trusted_proxy:
+        try:
+            trusted_proxy = str(ipaddress.ip_address(trusted_proxy))
+        except ValueError as exc:
+            raise ValueError("ANGOLA_TRUSTED_PROXY must contain one exact IPv4 or IPv6 address.") from exc
+        options.update(
+            trusted_proxy=trusted_proxy,
+            trusted_proxy_headers={"x-forwarded-for", "x-forwarded-proto"},
+            clear_untrusted_proxy_headers=True,
+        )
+    return options
+
+
 def main():
     from waitress import serve
-    host = os.getenv("ANGOLA_HOST", "127.0.0.1")
-    port = int(os.getenv("ANGOLA_PORT", "8000"))
-    threads = int(os.getenv("ANGOLA_THREADS", "8"))
-    connection_limit = int(os.getenv("ANGOLA_CONNECTION_LIMIT", "128"))
-    channel_timeout = int(os.getenv("ANGOLA_CHANNEL_TIMEOUT", "30"))
     logging.basicConfig(level=logging.INFO, format="%(message)s")
-    options = {}
-    trusted_proxy = os.getenv("ANGOLA_TRUSTED_PROXY")
-    if trusted_proxy:
-        options.update(trusted_proxy=trusted_proxy,
-                       trusted_proxy_headers={"x-forwarded-for", "x-forwarded-proto"},
-                       clear_untrusted_proxy_headers=True)
-    serve(application, host=host, port=port, threads=threads, connection_limit=connection_limit,
-          channel_timeout=channel_timeout, max_request_header_size=8192,
-          max_request_body_size=0, expose_tracebacks=False, ident="AngolaLegal", **options)
+    serve(application, **waitress_options())

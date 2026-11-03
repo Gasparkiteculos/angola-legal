@@ -145,8 +145,10 @@ def dispatch(path, records=None, coverage=None):
         return 200, "application/json; charset=utf-8", catalogue_coverage(coverage, records)
     if route == API_PREFIX + "/graph":
         try:
-            depth = min(max(int(params.get("depth", ["1"])[0]), 0), 3)
+            depth = int(params.get("depth", ["1"])[0])
         except ValueError:
+            return 400, "application/json; charset=utf-8", {"error": "depth must be an integer from 0 to 3"}
+        if depth < 0 or depth > 3:
             return 400, "application/json; charset=utf-8", {"error": "depth must be an integer from 0 to 3"}
         record_id = params.get("record_id", [None])[0]
         from catalog import build_relationship_graph
