@@ -96,8 +96,15 @@ class ProductionWsgiTests(unittest.TestCase):
             sitemap = request("/sitemap.xml")
             robots = request("/robots.txt")
         self.assertEqual("200 OK", sitemap["status"])
-        self.assertIn(b"https://legal.example/?record=al%3Aao%3Alei-18-21-2021", sitemap["body"])
+        self.assertIn(b"https://legal.example/documents/al%3Aao%3Alei-18-21-2021", sitemap["body"])
         self.assertIn(b"Sitemap: https://legal.example/sitemap.xml", robots["body"])
+
+    def test_document_page_is_server_rendered_and_escaped(self):
+        page = request("/documents/al:ao:lei-18-21-2021")
+        self.assertEqual("200 OK", page["status"])
+        self.assertIn(b"<title>Lei n.", page["body"])
+        missing = request("/documents/not-found")
+        self.assertEqual("404 Error", missing["status"])
 
     def test_limiter_storage_is_bounded(self):
         limiter = production.TokenBucketLimiter(rate=60, capacity=5, max_clients=3)
